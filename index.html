@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fame · Eat like you went out, all week</title>
+<meta name="description" content="Pick real dishes from Amsterdam restaurants you already love. One delivery, ready whenever you are.">
+<meta name="theme-color" content="#fffacc">
+<meta name="robots" content="noindex">
+<meta name="facebook-domain-verification" content="7z7enjgoa9rab78r014r2788xfrvnc" />
+
+<!-- Absolute urls required, or the link preview is blank when you DM or story the link. -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://eatfame.com/">
+<meta property="og:title" content="Fame · Eat like you went out, all week">
+<meta property="og:description" content="Pick real dishes from Amsterdam restaurants you already love. One delivery, ready whenever you are.">
+<!-- Pasta Pasta at 800px, the only card image over Meta's 600px minimum for a large preview card. -->
+<meta property="og:image" content="https://eatfame.com/img/restaurants/pasta-pasta.jpg">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+<!-- Above-the-fold display faces. Self-hosted, so no third-party connection. -->
+<link rel="preload" href="fonts/cg-italic-600.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/cg-italic-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="app">
+  <section id="view-home"    class="view pad-bar"></section>
+  <section id="view-menu"    class="view pad-bar"></section>
+  <section id="view-cart"    class="view pad-bar"></section>
+  <section id="view-reserve" class="view pad-bar"></section>
+  <section id="view-done"    class="view pad-bar"></section>
+</div>
+
+<div id="cartbar"></div>
+<div id="consent" hidden></div>
+
+<script src="config.js"></script>
+
+<!-- Analytics. Each block only loads if you filled in the ID in config.js. -->
+<script>
+(function () {
+  var C = window.CONFIG;
+
+  var consent = null;
+  try { consent = localStorage.getItem('fame_consent_v1'); } catch (e) {}
+
+  // Analytics runs from the start but WITHOUT cookies and WITHOUT a persistent
+  // identifier, so no tracking identifier is stored before consent. On accept we
+  // upgrade to localStorage so returning visitors are not double counted.
+  if (C.posthogKey) {
+    !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once unregister identify alias people.set people.set_once set_config get_distinct_id".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+    posthog.init(C.posthogKey, {
+      api_host: C.posthogHost,
+      persistence: consent === 'granted' ? 'localStorage' : 'memory',
+      capture_pageview: true,   // powers PostHog's built-in Web Analytics dashboard
+      autocapture: false,
+      disable_session_recording: true,
+    });
+  }
+
+  // Marketing pixel. Loaded only on consent, never before.
+  window.FAME_loadMarketing = function () {
+    if (!C.metaPixelId || window.fbq) return;
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', C.metaPixelId);
+    fbq('track', 'PageView');
+  };
+  // Consent withdrawal. fbevents.js cannot be unloaded once fetched, so revoke
+  // via Meta's consent API, neutralise fbq so nothing further is sent, and drop
+  // Meta's first-party cookies.
+  window.FAME_stopMarketing = function () {
+    try { if (window.fbq) window.fbq('consent', 'revoke'); } catch (e) {}
+    try {
+      window.fbq = function () {};
+      var host = location.hostname.replace(/^www\./, '');
+      ['_fbp', '_fbc'].forEach(function (c) {
+        document.cookie = c + '=; Max-Age=0; path=/';
+        document.cookie = c + '=; Max-Age=0; path=/; domain=.' + host;
+      });
+    } catch (e) {}
+  };
+  window.FAME_upgradeAnalytics = function () {
+    try { if (window.posthog && posthog.set_config) posthog.set_config({ persistence: 'localStorage' }); } catch (e) {}
+  };
+  if (consent === 'granted') { window.FAME_loadMarketing(); window.FAME_upgradeAnalytics(); }
+
+  if (C.googleTagId) {
+    var g = document.createElement('script');
+    g.async = true;
+    g.src = 'https://www.googletagmanager.com/gtag/js?id=' + C.googleTagId;
+    document.head.appendChild(g);
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () { dataLayer.push(arguments); };
+    gtag('js', new Date());
+    gtag('config', C.googleTagId);
+  }
+})();
+</script>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

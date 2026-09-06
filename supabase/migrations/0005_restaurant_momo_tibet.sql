@@ -8,12 +8,11 @@
 -- as the 2-dish tier, stepping down roughly 12.5% and 25% for the 3- and
 -- 4-dish tiers -- same shape as every other restaurant in the seed.
 --
--- No rating: this one came in direct rather than via a marketplace listing,
--- so there's no public score to show, and inventing one is not an option.
--- The restaurant cards hide the rating line when it's null.
+-- Rating supplied by Paolo (4.1 from 154 ratings), shown as "150+" to match
+-- the rounded review counts used for every other restaurant here.
 
 insert into restaurants (slug, name, blurb, rating, reviews, tags, image_path, sort_order) values
-  ('momo-tibet', 'Momo Tibet', 'Tibetan kitchen, momo folded by hand', null, null,
+  ('momo-tibet', 'Momo Tibet', 'Tibetan kitchen, momo folded by hand', 4.1, '150+',
    array['Tibetan','Momo','Noodles'], 'img/restaurants/momo-tibet.jpg', 14)
 on conflict (slug) do nothing;
 

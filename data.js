@@ -207,11 +207,13 @@ window.RESTAURANTS = [
     // Specialty dishes only, per the owner. Prices are the restaurant's own
     // menu prices (momotibet.com/menu) at the 2-dish tier, stepping down
     // ~12.5% and ~25% like every other restaurant here.
+    // Only dishes that have their own photo on momotibet.com are listed --
+    // the beef and veg steamed momo were dropped because their site has one
+    // shared momo photo, and Veg Mokthuk covers the vegetarian slot instead.
     dishes: [
       { id: 'chicken-momo',      name: 'Chicken Momo',      desc: 'Steamed dumplings, minced chicken, onion and spices', price: [13.50, 11.75, 10.00] },
-      { id: 'beef-momo',         name: 'Beef Momo',         desc: 'Steamed dumplings, minced beef, onion and spices',    price: [14.50, 12.75, 11.00] },
-      { id: 'veg-momo',          name: 'Veg Momo',          desc: 'Steamed dumplings, vegetables, onion and spices',     price: [12.50, 11.00,  9.50] },
       { id: 'jhol-momo',         name: 'Jhol Momo',         desc: 'Momo in a tomato, sesame, garlic and chili broth',    price: [14.00, 12.25, 10.50] },
+      { id: 'veg-mokthuk',       name: 'Veg Mokthuk',       desc: 'Vegetable momo in a warming broth',                  price: [12.50, 11.00,  9.50] },
       { id: 'spicy-fried-momo',  name: 'Spicy Fried Momo',  desc: 'Pan-fried momo, garlic-chili sauce, onion, peppers',  price: [14.00, 12.25, 10.50] },
       { id: 'thenthuk',          name: 'Thenthuk',          desc: 'Hand-pulled noodle soup with beef',                  price: [14.50, 12.75, 11.00] },
       { id: 'phing-sha',         name: 'Phing Sha',         desc: 'Glass noodle and beef stew, spices, steamed rice',    price: [16.50, 14.50, 12.50] },

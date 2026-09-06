@@ -88,9 +88,8 @@ with d (rslug, dslug, name, description, p2, p3, p4) as (
 
     -- Specialty dishes only, per the owner. Menu prices from momotibet.com.
     ('momo-tibet','chicken-momo','Chicken Momo','Steamed dumplings, minced chicken, onion and spices',13.50,11.75,10.00),
-    ('momo-tibet','beef-momo','Beef Momo','Steamed dumplings, minced beef, onion and spices',14.50,12.75,11.00),
-    ('momo-tibet','veg-momo','Veg Momo','Steamed dumplings, vegetables, onion and spices',12.50,11.00,9.50),
     ('momo-tibet','jhol-momo','Jhol Momo','Momo in a tomato, sesame, garlic and chili broth',14.00,12.25,10.50),
+    ('momo-tibet','veg-mokthuk','Veg Mokthuk','Vegetable momo in a warming broth',12.50,11.00,9.50),
     ('momo-tibet','spicy-fried-momo','Spicy Fried Momo','Pan-fried momo, garlic-chili sauce, onion, peppers',14.00,12.25,10.50),
     ('momo-tibet','thenthuk','Thenthuk','Hand-pulled noodle soup with beef',14.50,12.75,11.00),
     ('momo-tibet','phing-sha','Phing Sha','Glass noodle and beef stew, spices, steamed rice',16.50,14.50,12.50),

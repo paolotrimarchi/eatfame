@@ -129,7 +129,6 @@ with d (rslug, dslug, name, description, p2, p3, p4) as (
     ('pasta-pasta','pomodoro','Pasta Pomodoro','Tomato sauce, garlic, olive oil',13.95,12.25,10.50),
     ('the-bab','classic-fried-chicken','Korean Fried Chicken','Slightly spicy sauce, topped with peanuts',18.50,16.25,14.00),
     ('the-bab','kimchi-bokkeumbab','Kimchi Bokkeumbab','Kimchi fried rice, fried egg, sesame',17.50,15.25,13.25),
-    ('the-bab','tteokbokki','Tteokbokki','Rice cake, fish cake, gochujang, spring onion',12.90,11.25,9.75),
     ('swagat','butter-chicken','Butter Chicken','Tandoori chicken, creamy tomato curry',25.50,22.25,19.25),
     ('swagat','lamb-rogan-josh','Lamb Rogan Josh','Kashmiri lamb, browned onion, yoghurt, ginger',26.50,23.25,20.00),
     ('swagat','chana-masala','Chana Masala','Chickpeas, medium-spiced curry sauce',20.50,18.00,15.50),

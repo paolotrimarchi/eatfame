@@ -12,13 +12,16 @@ Replace these with real dish photos and this file shrinks accordingly.
 | Butter Chicken | Yuvraj Singh 97 | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Butter_Chicken_%26_Butter_Naan_-_Home_-_Chandigarh_-_India_-_0006.jpg |
 | Chana Masala | Simon Law (sfllaw) from Montréal, QC, Canada | CC BY-SA 2.0 | https://commons.wikimedia.org/wiki/File:Chana_masala.jpg |
 | Chicken Gyros Kapsalon | Amin | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Kapsalon_dutch_meal.jpg |
+| Chicken Gyros Kapsalon | Unknown authorUnknown author | CC BY-SA 3.0 | https://commons.wikimedia.org/wiki/File:COLLECTIE_TROPENMUSEUM_Een_kapsalon_te_Surabaya_Java_TMnr_10002829.jpg |
 | Chicken Korma | Miansari66 | CC0 | https://commons.wikimedia.org/wiki/File:Chicken_Korma.JPG |
 | Chicken Souvlaki Wrap | EntaXoyas | CC BY-SA 3.0 | https://commons.wikimedia.org/wiki/File:%CE%95%CE%BB%CE%BB%CE%B7%CE%BD%CE%B9%CE%BA%CF%8C_%CE%A3%CE%BF%CF%85%CE%B2%CE%BB%CE%AC%CE%BA%CE%B9_-_panoramio.jpg |
 | Deluxe Box | chidorian from Japan | CC BY-SA 2.0 | https://commons.wikimedia.org/wiki/File:Sushi_platter.jpg |
 | Fish Box | Tim Reckmann from Hamm, Deutschland | CC BY 2.0 | https://commons.wikimedia.org/wiki/File:California_Sushi_%2826571101885%29.jpg |
 | Gado Gado | Piknikdong | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Gado_gado_jakarta.jpg |
 | Javaanse Moksie | shankar s. from Dubai, united arab emirates | CC BY 2.0 | https://commons.wikimedia.org/wiki/File:Nasi_Goreng_Kampung_%2811967588375%29.jpg |
+| Kimchi Bokkeumbab | Jungyeon Min | CC0 | https://commons.wikimedia.org/wiki/File:Bokkeum-bap.jpg |
 | Kimchi Bokkeumbab | unknown | unknown | https://commons.wikimedia.org/wiki/File:Kimchi_fried_rice.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled |
+| Korean Fried Chicken | Jirangmoon | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Yangnyeom-chikin_bhcChicken_1.jpg |
 | Korean Fried Chicken | unknown | unknown | https://commons.wikimedia.org/wiki/File:Iksan_City_48_Korean_Style_Fried_chicken.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled |
 | Lamb Rogan Josh | Spice Eats | CC BY 3.0 | https://commons.wikimedia.org/wiki/File:Rogan_Josh_Kashmiri.jpg |
 | Nasi Sate | unknown | unknown | https://commons.wikimedia.org/wiki/File:Sate_Udang.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled |

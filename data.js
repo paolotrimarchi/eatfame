@@ -47,7 +47,6 @@ window.RESTAURANTS = [
       /* added from Uber Eats (Oud West) */
       { id: 'classic-fried-chicken',   name: 'Korean Fried Chicken',              desc: 'Slightly spicy sauce, topped with peanuts',           price: [18.50, 16.25, 14.00] },
       { id: 'kimchi-bokkeumbab',       name: 'Kimchi Bokkeumbab',                 desc: 'Kimchi fried rice, fried egg, sesame',                price: [17.50, 15.25, 13.25] },
-      { id: 'tteokbokki',              name: 'Tteokbokki',                        desc: 'Rice cake, fish cake, gochujang, spring onion',       price: [12.90, 11.25, 9.75] },
     ],
   },
   {

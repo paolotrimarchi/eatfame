@@ -129,9 +129,8 @@ fetch() {
 }
 
 echo "The Bab:"
-fetch "Korean fried chicken" "img/dishes/the-bab/classic-fried-chicken.jpg" "Korean Fried Chicken"
-fetch "Kimchi fried rice"    "img/dishes/the-bab/kimchi-bokkeumbab.jpg"     "Kimchi Bokkeumbab"
-fetch "Tteokbokki"           "img/dishes/the-bab/tteokbokki.jpg"            "Tteokbokki"
+fetch "Yangnyeom chicken"    "img/dishes/the-bab/classic-fried-chicken.jpg" "Korean Fried Chicken"
+fetch "Bokkeumbap"           "img/dishes/the-bab/kimchi-bokkeumbab.jpg"     "Kimchi Bokkeumbab"
 
 echo "Pasta Pasta:"
 fetch "Carbonara"            "img/dishes/pasta-pasta/carbonara.jpg"           "Spaghetti Carbonara"
@@ -144,9 +143,9 @@ fetch "Korma"                "img/dishes/pind-punjabi/chicken-korma.jpg" "Chicke
 fetch "Palak paneer"         "img/dishes/pind-punjabi/saag-paneer.jpg"   "Saag Paneer"
 
 echo "Gyros Republic:"
-fetch "Souvlaki"             "img/dishes/gyros-republic/chicken-souvlaki-wrap.jpg"   "Chicken Souvlaki Wrap"
-fetch "Gyros"                "img/dishes/gyros-republic/pork-gyros-skepasti.jpg"     "Pork Gyros Skepasti"
-fetch "Kapsalon"             "img/dishes/gyros-republic/chicken-gyros-kapsalon.jpg"  "Chicken Gyros Kapsalon"
+fetch "Souvlaki"             "img/dishes/gyros-republic/chicken-souvlaki-wrap.jpg"   "Chicken Souvlaki Wrap" el
+fetch "Gyros"                "img/dishes/gyros-republic/pork-gyros-skepasti.jpg"     "Pork Gyros Skepasti" de
+fetch "Kapsalon"             "img/dishes/gyros-republic/chicken-gyros-kapsalon.jpg"  "Chicken Gyros Kapsalon" nl
 
 echo "Dolce Verona:"
 fetch "Carbonara"            "img/dishes/dolce-verona/carbonara.jpg"           "Spaghetti alla Carbonara" it

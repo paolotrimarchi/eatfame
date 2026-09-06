@@ -1,10 +1,21 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { requestMagicLink } from './actions';
 
+// useSearchParams() opts the page into client-side rendering, and a production
+// build refuses to prerender that without a Suspense boundary around it. Dev
+// doesn't enforce this, so it only shows up at build time.
 export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="wrap" style={{ paddingTop: 24 }} />}>
+      <LoginForm />
+    </Suspense>
+  );
+}
+
+function LoginForm() {
   const searchParams = useSearchParams();
   const next = searchParams.get('next') || '/';
   const expired = searchParams.get('expired') === '1';

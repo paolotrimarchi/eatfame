@@ -4,18 +4,18 @@
 -- they weren't part of the old fake-door site.
 
 insert into restaurants (slug, name, blurb, rating, reviews, tags, image_path, sort_order) values
-  ('pasta-pasta',          'Pasta Pasta',              'Fresh Italian pasta, made daily',            4.3, '7,000+', array['Italian','Pasta'],               'img/restaurants/pasta-pasta.jpg', 1),
-  ('otaru-sushi',          'Otaru Sushi Restaurant',   'Japanese sushi, cut fresh to order',          4.7, '5,000+', array['Sushi','Japanese','Asian'],      'img/restaurants/otaru-sushi.jpg', 2),
-  ('the-bab',              'The Bab',                  'Korean comfort food',                         4.7, '2,000+', array['Korean','Asian','BBQ'],          'img/restaurants/the-bab.jpg', 3),
-  ('swagat',               'Swagat Restaurant',        'North Indian comfort food',                   4.6, '2,000+', array['Indian','Comfort food'],         'img/restaurants/swagat.jpg', 4),
-  ('dolce-verona',         'Dolce Verona',             'Italian trattoria, pasta and pizza',           4.7, '4,000+', array['Italian','Pizza','Pasta'],       'img/restaurants/dolce-verona.jpg', 5),
-  ('warung-mini',          'Warung Mini',              'Indonesian warung, rice plates',               4.6, '3,000+', array['Indonesian','Sandwich'],         'img/restaurants/warung-mini.jpg', 6),
-  ('salsa-shop',           'Salsa Shop',               'Mexican tacos and bowls',                      4.3, '2,000+', array['Mexican','Tex Mex','Halal'],     'img/restaurants/salsa-shop.jpg', 7),
-  ('pind-punjabi',         'Pind Punjabi',             'North Indian, Punjabi kitchen',                4.6, '900+',   array['Indian','Chicken'],              'img/restaurants/pind-punjabi.jpg', 8),
-  ('wan-shun',             'Wan Shun Restaurant',      'Chinese kitchen, rice bowls and stir-fry',     4.7, '1,500+', array['Chinese','Rice bowls'],          'img/restaurants/wan-shun.jpg', 9),
-  ('mizu-bar',             'Mizu Bar',                 'Asian fusion, sushi and rice boxes',           4.8, '1,000+', array['Japanese','Asian fusion','Sushi'],'img/restaurants/mizu-bar.jpg', 10),
-  ('american-spareribs',   'American Spareribs',       'Slow-cooked ribs and wings',                   4.4, '1,000+', array['American','Wings'],              'img/restaurants/american-spareribs.jpg', 11),
-  ('gyros-republic',       'Gyros Republic',           'Greek street food',                            4.4, '270+',   array['Greek','Mediterranean'],         'img/restaurants/gyros-republic.jpg', 12),
+  ('pasta-pasta',          'Pasta Pasta',              'Fresh Italian pasta, made daily',            4.3, '7,000+', array['Italian','Pasta'],               'img/restaurants/pasta-pasta.jpg', 2),
+  ('otaru-sushi',          'Otaru Sushi Restaurant',   'Japanese sushi, cut fresh to order',          4.7, '5,000+', array['Sushi','Japanese','Asian'],      'img/restaurants/otaru-sushi.jpg', 4),
+  ('the-bab',              'The Bab',                  'Korean comfort food',                         4.7, '2,000+', array['Korean','Asian','BBQ'],          'img/restaurants/the-bab.jpg', 1),
+  ('swagat',               'Swagat Restaurant',        'North Indian comfort food',                   4.6, '2,000+', array['Indian','Comfort food'],         'img/restaurants/swagat.jpg', 9),
+  ('dolce-verona',         'Dolce Verona',             'Italian trattoria, pasta and pizza',           4.7, '4,000+', array['Italian','Pizza','Pasta'],       'img/restaurants/dolce-verona.jpg', 8),
+  ('warung-mini',          'Warung Mini',              'Indonesian warung, rice plates',               4.6, '3,000+', array['Indonesian','Sandwich'],         'img/restaurants/warung-mini.jpg', 11),
+  ('salsa-shop',           'Salsa Shop',               'Mexican tacos and bowls',                      4.3, '2,000+', array['Mexican','Tex Mex','Halal'],     'img/restaurants/salsa-shop.jpg', 10),
+  ('pind-punjabi',         'Pind Punjabi',             'North Indian, Punjabi kitchen',                4.6, '900+',   array['Indian','Chicken'],              'img/restaurants/pind-punjabi.jpg', 3),
+  ('wan-shun',             'Wan Shun Restaurant',      'Chinese kitchen, rice bowls and stir-fry',     4.7, '1,500+', array['Chinese','Rice bowls'],          'img/restaurants/wan-shun.jpg', 5),
+  ('mizu-bar',             'Mizu Bar',                 'Asian fusion, sushi and rice boxes',           4.8, '1,000+', array['Japanese','Asian fusion','Sushi'],'img/restaurants/mizu-bar.jpg', 7),
+  ('american-spareribs',   'American Spareribs',       'Slow-cooked ribs and wings',                   4.4, '1,000+', array['American','Wings'],              'img/restaurants/american-spareribs.jpg', 12),
+  ('gyros-republic',       'Gyros Republic',           'Greek street food',                            4.4, '270+',   array['Greek','Mediterranean'],         'img/restaurants/gyros-republic.jpg', 6),
   ('gnoccheria',           'Gnoccheria',               'Fresh gnocchi, made daily',                    4.7, '330+',   array['Italian','Pasta','Vegetarian'],  'img/restaurants/gnoccheria.jpg', 13),
   ('momo-tibet',           'Momo Tibet',               'Tibetan kitchen, momo folded by hand',         4.1, '150+',   array['Tibetan','Noodles'],      'img/restaurants/momo-tibet.jpg', 14)
 on conflict (slug) do nothing;

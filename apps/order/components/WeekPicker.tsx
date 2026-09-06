@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { weekOptions, dayDate, LEAD_DAYS } from '@/lib/weeks';
+import { weekOptions, dayDate } from '@/lib/weeks';
 import { getSelectedWeek, setSelectedWeek, WEEK_CHANGED } from '@/lib/weekSelection';
 import { shortDate } from '@/lib/format';
 
@@ -25,8 +25,7 @@ export default function WeekPicker() {
   const selected = week ?? 0;
 
   return (
-    <div className="wrap" style={{ margin: '4px 0 18px' }}>
-      <div className="sub-h" style={{ margin: '0 0 8px' }}>Delivering</div>
+    <div className="wrap" style={{ margin: '18px 0 4px' }}>
       <div className="weekbar">
         {options.map((w) => (
           <button
@@ -40,7 +39,7 @@ export default function WeekPicker() {
         ))}
       </div>
       <p className="muted" style={{ margin: '8px 0 0', fontSize: 12.5 }}>
-        Sunday or Monday delivery, your pick at checkout. Orders close {LEAD_DAYS} days before.
+        Sunday or Monday delivery. Orders close Friday.
       </p>
     </div>
   );

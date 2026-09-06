@@ -120,22 +120,22 @@ with expected (rslug, dslug, name, description, p2, p3, p4) as (
     ('momo-tibet','phing-sha','Phing Sha','Glass noodle and beef stew, spices, steamed rice',16.50,14.50,12.50),
     ('momo-tibet','shaptak','Shaptak','Spicy stir-fried beef, served with rice or tingmo',17.00,15.00,12.75)
 ),
-expected_restaurants (slug, name, rating, reviews, tags) as (
+expected_restaurants (slug, name, rating, reviews, tags, sort_order) as (
   values
-    ('the-bab','The Bab',4.7,'2,000+',array['Korean','Asian','BBQ']),
-    ('pasta-pasta','Pasta Pasta',4.3,'7,000+',array['Italian','Pasta']),
-    ('pind-punjabi','Pind Punjabi',4.6,'900+',array['Indian','Chicken']),
-    ('otaru-sushi','Otaru Sushi Restaurant',4.7,'5,000+',array['Sushi','Japanese','Asian']),
-    ('wan-shun','Wan Shun Restaurant',4.7,'1,500+',array['Chinese','Rice bowls']),
-    ('gyros-republic','Gyros Republic',4.4,'270+',array['Greek','Mediterranean']),
-    ('mizu-bar','Mizu Bar',4.8,'1,000+',array['Japanese','Asian fusion','Sushi']),
-    ('dolce-verona','Dolce Verona',4.7,'4,000+',array['Italian','Pizza','Pasta']),
-    ('swagat','Swagat Restaurant',4.6,'2,000+',array['Indian','Comfort food']),
-    ('salsa-shop','Salsa Shop',4.3,'2,000+',array['Mexican','Tex Mex','Halal']),
-    ('warung-mini','Warung Mini',4.6,'3,000+',array['Indonesian','Sandwich']),
-    ('american-spareribs','American Spareribs',4.4,'1,000+',array['American','Wings']),
-    ('gnoccheria','Gnoccheria',4.7,'330+',array['Italian','Pasta','Vegetarian']),
-    ('momo-tibet','Momo Tibet',4.1,'150+',array['Tibetan','Noodles'])
+    ('the-bab','The Bab',4.7,'2,000+',array['Korean','Asian','BBQ'],1),
+    ('pasta-pasta','Pasta Pasta',4.3,'7,000+',array['Italian','Pasta'],2),
+    ('pind-punjabi','Pind Punjabi',4.6,'900+',array['Indian','Chicken'],3),
+    ('otaru-sushi','Otaru Sushi Restaurant',4.7,'5,000+',array['Sushi','Japanese','Asian'],4),
+    ('wan-shun','Wan Shun Restaurant',4.7,'1,500+',array['Chinese','Rice bowls'],5),
+    ('gyros-republic','Gyros Republic',4.4,'270+',array['Greek','Mediterranean'],6),
+    ('mizu-bar','Mizu Bar',4.8,'1,000+',array['Japanese','Asian fusion','Sushi'],7),
+    ('dolce-verona','Dolce Verona',4.7,'4,000+',array['Italian','Pizza','Pasta'],8),
+    ('swagat','Swagat Restaurant',4.6,'2,000+',array['Indian','Comfort food'],9),
+    ('salsa-shop','Salsa Shop',4.3,'2,000+',array['Mexican','Tex Mex','Halal'],10),
+    ('warung-mini','Warung Mini',4.6,'3,000+',array['Indonesian','Sandwich'],11),
+    ('american-spareribs','American Spareribs',4.4,'1,000+',array['American','Wings'],12),
+    ('gnoccheria','Gnoccheria',4.7,'330+',array['Italian','Pasta','Vegetarian'],13),
+    ('momo-tibet','Momo Tibet',4.1,'150+',array['Tibetan','Noodles'],14)
 )
 
 select 'MISSING FROM DB' as issue, e.rslug as restaurant, e.dslug as dish, null::text as detail
@@ -170,7 +170,7 @@ select 'RESTAURANT DRIFT', er.slug, null,
        '  |  site: ' || er.name || ' ' || coalesce(er.rating::text,'-') || ' ' || coalesce(er.reviews,'-') || ' ' || er.tags::text
 from expected_restaurants er
 join restaurants r on r.slug = er.slug
-where r.name <> er.name or r.tags <> er.tags
+where r.name <> er.name or r.tags <> er.tags or r.sort_order <> er.sort_order
    or coalesce(r.rating,-1) <> coalesce(er.rating,-1)
    or coalesce(r.reviews,'') <> coalesce(er.reviews,'')
 

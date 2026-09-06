@@ -284,7 +284,7 @@ window.RESTAURANTS = [
     blurb: 'Tibetan kitchen, momo folded by hand',
     rating: 4.1,
     reviews: '150+',
-    tags: ['Tibetan', 'Momo', 'Noodles'],
+    tags: ['Tibetan', 'Noodles'],
     // Specialty dishes only, per the owner. Prices are the restaurant's own
     // menu prices (momotibet.com/menu) at the 2-dish tier, stepping down
     // ~12.5% and ~25% like every other restaurant here.

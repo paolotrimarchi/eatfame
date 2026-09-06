@@ -17,7 +17,7 @@ insert into restaurants (slug, name, blurb, rating, reviews, tags, image_path, s
   ('american-spareribs',   'American Spareribs',       'Slow-cooked ribs and wings',                   4.4, '1,000+', array['American','Wings'],              'img/restaurants/american-spareribs.jpg', 11),
   ('gyros-republic',       'Gyros Republic',           'Greek street food',                            4.4, '270+',   array['Greek','Mediterranean'],         'img/restaurants/gyros-republic.jpg', 12),
   ('gnoccheria',           'Gnoccheria',               'Fresh gnocchi, made daily',                    4.7, '330+',   array['Italian','Pasta','Vegetarian'],  'img/restaurants/gnoccheria.jpg', 13),
-  ('momo-tibet',           'Momo Tibet',               'Tibetan kitchen, momo folded by hand',         4.1, '150+',   array['Tibetan','Momo','Noodles'],      'img/restaurants/momo-tibet.jpg', 14)
+  ('momo-tibet',           'Momo Tibet',               'Tibetan kitchen, momo folded by hand',         4.1, '150+',   array['Tibetan','Noodles'],      'img/restaurants/momo-tibet.jpg', 14)
 on conflict (slug) do nothing;
 
 -- dishes: (restaurant slug, dish slug, name, description, price@2, price@3, price@4, image path)

@@ -21,6 +21,19 @@ for d in otaru-sushi wan-shun mizu-bar salsa-shop; do
 done
 
 ok=0; fail=0; skip=0
+
+# Dish tiles are square; resample the short side to 800 then centre-crop,
+# so tall photos aren't left for CSS to butcher.
+square() {
+  command -v sips >/dev/null 2>&1 || return 0
+  local f="$1" w h
+  w=$(sips -g pixelWidth  "$f" 2>/dev/null | awk '/pixelWidth/{print $2}')
+  h=$(sips -g pixelHeight "$f" 2>/dev/null | awk '/pixelHeight/{print $2}')
+  [ -z "${w:-}" ] || [ -z "${h:-}" ] && return 0
+  if [ "$w" -ge "$h" ]; then sips --resampleHeight 800 "$f" >/dev/null 2>&1
+  else sips --resampleWidth 800 "$f" >/dev/null 2>&1; fi
+  sips -c 800 800 "$f" >/dev/null 2>&1
+}
 # Safe to re-run: anything already downloaded is left alone, and each URL gets
 # three attempts, since a few of these failed transiently the first time.
 get() {
@@ -30,7 +43,7 @@ get() {
   local delay=2
   for attempt in 1 2 3; do
     if curl -fsSL --max-time 45 "$1" -o "$2"; then
-      command -v sips >/dev/null 2>&1 && sips -Z 800 "$2" >/dev/null 2>&1
+      square "$2"
       echo "  ok   $2"; ok=$((ok+1)); return
     fi
     sleep "$delay"; delay=$((delay * 2))
@@ -48,7 +61,7 @@ get_alt() {
   fi
   for url in "$a" "$b"; do
     if curl -fsSL --max-time 45 "$url" -o "$out" 2>/dev/null; then
-      command -v sips >/dev/null 2>&1 && sips -Z 800 "$out" >/dev/null 2>&1
+      square "$out"
       echo "  ok   $out"; ok=$((ok+1)); return
     fi
   done

@@ -59,9 +59,26 @@ json_field() {
     });'
 }
 
-# fetch <wikipedia-article-title> <output-path> <label>
+# The dish tiles are square. "sips -Z" only caps the longest side, so tall
+# photos stayed tall and got badly cropped by CSS. Resample the SHORT side to
+# 800 then centre-crop to 800x800, so what we store is what gets shown.
+square() {
+  command -v sips >/dev/null 2>&1 || return 0
+  local f="$1" w h
+  w=$(sips -g pixelWidth  "$f" 2>/dev/null | awk '/pixelWidth/{print $2}')
+  h=$(sips -g pixelHeight "$f" 2>/dev/null | awk '/pixelHeight/{print $2}')
+  [ -z "${w:-}" ] || [ -z "${h:-}" ] && return 0
+  if [ "$w" -ge "$h" ]; then sips --resampleHeight 800 "$f" >/dev/null 2>&1
+  else sips --resampleWidth 800 "$f" >/dev/null 2>&1; fi
+  sips -c 800 800 "$f" >/dev/null 2>&1
+}
+
+# fetch <wikipedia-article-title> <output-path> <label> [lang]
+# Different language editions of the same article usually carry different
+# lead photos, which is how two restaurants both serving carbonara end up
+# with two different pictures instead of the same one twice.
 fetch() {
-  local title="$1" out="$2" label="$3"
+  local title="$1" out="$2" label="$3" lang="${4:-en}"
 
   if [ -f "$out" ] && [ "$(wc -c < "$out" | tr -d ' ')" -gt 5000 ]; then
     echo "  skip $label (already have it)"; skip=$((skip+1)); return
@@ -69,7 +86,7 @@ fetch() {
 
   local slug json src
   slug=$(printf '%s' "$title" | sed 's/ /_/g')
-  if ! json=$(api_get "https://en.wikipedia.org/api/rest_v1/page/summary/$slug"); then
+  if ! json=$(api_get "https://${lang}.wikipedia.org/api/rest_v1/page/summary/$slug"); then
     echo "  FAIL $label — couldn't reach article \"$title\""; fail=$((fail+1)); sleep 1; return
   fi
 
@@ -83,9 +100,7 @@ fetch() {
     echo "  FAIL $label — download failed"; fail=$((fail+1)); sleep 1; return
   fi
 
-  # Resize immediately rather than in a batch at the end, which is where the
-  # previous version silently did nothing.
-  command -v sips >/dev/null 2>&1 && sips -Z 800 "$out" >/dev/null 2>&1
+  square "$out"
 
   # Strip both the NNNpx- thumbnail prefix AND the ?utm_source=... query
   # string; leaving the query on was why every credit came back "unknown".
@@ -134,8 +149,8 @@ fetch "Gyros"                "img/dishes/gyros-republic/pork-gyros-skepasti.jpg"
 fetch "Kapsalon"             "img/dishes/gyros-republic/chicken-gyros-kapsalon.jpg"  "Chicken Gyros Kapsalon"
 
 echo "Dolce Verona:"
-fetch "Spaghetti"            "img/dishes/dolce-verona/carbonara.jpg"           "Spaghetti alla Carbonara"
-fetch "Truffle (fungus)"     "img/dishes/dolce-verona/tagliatelle-tartufo.jpg" "Tagliatelle Tartufo"
+fetch "Carbonara"            "img/dishes/dolce-verona/carbonara.jpg"           "Spaghetti alla Carbonara" it
+fetch "Tagliatelle"          "img/dishes/dolce-verona/tagliatelle-tartufo.jpg" "Tagliatelle Tartufo" it
 fetch "Pizza Margherita"     "img/dishes/dolce-verona/pizza-margherita.jpg"    "Pizza Margherita"
 
 echo "Swagat:"
@@ -157,7 +172,7 @@ fetch "Ribs (food)"          "img/dishes/american-spareribs/spareribs-piri-piri.
 
 echo "Gnoccheria:"
 fetch "Bolognese sauce"      "img/dishes/gnoccheria/bolognese.jpg"         "Bolognese"
-fetch "Burrata"              "img/dishes/gnoccheria/burrata-datterini.jpg" "Burrata and Datterini"
+fetch "Gnocchi"              "img/dishes/gnoccheria/burrata-datterini.jpg" "Burrata and Datterini"
 fetch "Pasta alla Norma"     "img/dishes/gnoccheria/norma.jpg"             "Norma"
 
 # ---- credits file ----

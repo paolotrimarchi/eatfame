@@ -7,6 +7,7 @@ Replace these with real dish photos and this file shrinks accordingly.
 | Dish | Photographer | Licence | Source |
 |---|---|---|---|
 | Bolognese | Ivan Vighetto | CC BY-SA 3.0 | https://commons.wikimedia.org/wiki/File:Tagliatelle_al_rag%C3%B9_%28image_modified%29.jpg |
+| Burrata and Datterini | Paoletta S. | CC BY 2.0 | https://commons.wikimedia.org/wiki/File:Gnocchi_di_ricotta_burro_e_salvia.jpg |
 | Burrata and Datterini | Popo le Chien | CC0 | https://commons.wikimedia.org/wiki/File:Burrata2.jpg |
 | Butter Chicken | Yuvraj Singh 97 | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Butter_Chicken_%26_Butter_Naan_-_Home_-_Chandigarh_-_India_-_0006.jpg |
 | Chana Masala | Simon Law (sfllaw) from Montréal, QC, Canada | CC BY-SA 2.0 | https://commons.wikimedia.org/wiki/File:Chana_masala.jpg |
@@ -26,10 +27,12 @@ Replace these with real dish photos and this file shrinks accordingly.
 | Rogan Josh | Spice Eats | CC BY 3.0 | https://commons.wikimedia.org/wiki/File:Rogan_Josh_Kashmiri.jpg |
 | Saag Paneer | Lopanayak | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Palakpaneer_Rayagada_Odisha_0009.jpg |
 | Spaghetti Carbonara | unknown | unknown | https://commons.wikimedia.org/wiki/File:Espaguetis_carbonara.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled |
+| Spaghetti alla Carbonara | Javier Somoza | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Espaguetis_carbonara.jpg |
 | Spaghetti alla Carbonara | Nnaluci | CC BY-SA 3.0 | https://commons.wikimedia.org/wiki/File:Spaghettoni.jpg |
 | Spareribs Barbecue | Gunawan Kartapranata | CC BY-SA 3.0 | https://commons.wikimedia.org/wiki/File:Balinese_Roasted_Pork_Ribs_-_Iga_Babi_Panggang_Bali.JPG |
 | Spareribs Piri Piri | David Monniaux | CC BY-SA 3.0 | https://commons.wikimedia.org/wiki/File:Cote_de_boeuf_p1040932.jpg |
 | Spareribs Sweet Chili | vxla from Chicago, US | CC BY 2.0 | https://commons.wikimedia.org/wiki/File:Barbecued_meats.jpg |
 | Tagliatelle Salmone | unknown | unknown | https://commons.wikimedia.org/wiki/File:Nests_of_tagliatelle_bolognesi.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled |
+| Tagliatelle Tartufo | Joy | CC BY 2.0 | https://commons.wikimedia.org/wiki/File:Making_a_better_homemade_pasta_-_16670047286.jpg |
 | Tagliatelle Tartufo | moi-même | Public domain | https://commons.wikimedia.org/wiki/File:Truffe_noire_du_P%C3%A9rigord.jpg |
 | Tteokbokki | unknown | unknown | https://commons.wikimedia.org/wiki/File:Tteokbokki.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail |

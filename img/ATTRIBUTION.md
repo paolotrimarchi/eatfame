@@ -14,6 +14,8 @@ Replace these with real dish photos and this file shrinks accordingly.
 | Chicken Gyros Kapsalon | Amin | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Kapsalon_dutch_meal.jpg |
 | Chicken Korma | Miansari66 | CC0 | https://commons.wikimedia.org/wiki/File:Chicken_Korma.JPG |
 | Chicken Souvlaki Wrap | EntaXoyas | CC BY-SA 3.0 | https://commons.wikimedia.org/wiki/File:%CE%95%CE%BB%CE%BB%CE%B7%CE%BD%CE%B9%CE%BA%CF%8C_%CE%A3%CE%BF%CF%85%CE%B2%CE%BB%CE%AC%CE%BA%CE%B9_-_panoramio.jpg |
+| Deluxe Box | chidorian from Japan | CC BY-SA 2.0 | https://commons.wikimedia.org/wiki/File:Sushi_platter.jpg |
+| Fish Box | Tim Reckmann from Hamm, Deutschland | CC BY 2.0 | https://commons.wikimedia.org/wiki/File:California_Sushi_%2826571101885%29.jpg |
 | Gado Gado | Piknikdong | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Gado_gado_jakarta.jpg |
 | Javaanse Moksie | shankar s. from Dubai, united arab emirates | CC BY 2.0 | https://commons.wikimedia.org/wiki/File:Nasi_Goreng_Kampung_%2811967588375%29.jpg |
 | Kimchi Bokkeumbab | unknown | unknown | https://commons.wikimedia.org/wiki/File:Kimchi_fried_rice.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled |
@@ -36,3 +38,5 @@ Replace these with real dish photos and this file shrinks accordingly.
 | Tagliatelle Tartufo | Joy | CC BY 2.0 | https://commons.wikimedia.org/wiki/File:Making_a_better_homemade_pasta_-_16670047286.jpg |
 | Tagliatelle Tartufo | moi-même | Public domain | https://commons.wikimedia.org/wiki/File:Truffe_noire_du_P%C3%A9rigord.jpg |
 | Tteokbokki | unknown | unknown | https://commons.wikimedia.org/wiki/File:Tteokbokki.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail |
+| Vega & Fish Box | Lotus Head from Johannesburg, Gauteng, South Africa | CC BY-SA 3.0 | https://commons.wikimedia.org/wiki/File:Sushi7.jpg |
+| Vega Box | DYVER | CC BY 4.0 | https://commons.wikimedia.org/wiki/File:Sushi_Platte_in_einem_asiatischen_Restaurant.jpg |

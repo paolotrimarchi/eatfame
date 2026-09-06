@@ -170,6 +170,12 @@ fetch "Pork ribs"            "img/dishes/american-spareribs/spareribs-barbecue.j
 fetch "Barbecue"             "img/dishes/american-spareribs/spareribs-sweet-chili.jpg" "Spareribs Sweet Chili"
 fetch "Ribs (food)"          "img/dishes/american-spareribs/spareribs-piri-piri.jpg"   "Spareribs Piri Piri"
 
+echo "Mizu Bar (their own box photos 404, so sushi stand-ins):"
+fetch "Sushi"                "img/dishes/mizu-bar/deluxe-box.jpg"   "Deluxe Box"
+fetch "Sushi"                "img/dishes/mizu-bar/vega-vis-box.jpg" "Vega & Fish Box" nl
+fetch "California roll"      "img/dishes/mizu-bar/vis-box.jpg"      "Fish Box"
+fetch "Sushi"                "img/dishes/mizu-bar/vega-box.jpg"     "Vega Box" de
+
 echo "Gnoccheria:"
 fetch "Bolognese sauce"      "img/dishes/gnoccheria/bolognese.jpg"         "Bolognese"
 fetch "Gnocchi"              "img/dishes/gnoccheria/burrata-datterini.jpg" "Burrata and Datterini"

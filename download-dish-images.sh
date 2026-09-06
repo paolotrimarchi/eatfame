@@ -96,10 +96,10 @@ get "https://cdn.order.app.hd.digital/media/attachments/14738/public/63c/1b6/818
 get "https://cdn.order.app.hd.digital/media/attachments/14738/public/63c/1b7/405/thumb_68_285_max_fit_max_1d62c22d.jpg" "img/dishes/wan-shun/tofu-skin-paprika.jpg"
 get "https://cdn.order.app.hd.digital/media/attachments/14738/public/63c/189/b19/thumb_32_285_max_fit_max_1d62c22d.jpg" "img/dishes/wan-shun/mapo-tofu.jpg"
 get "https://cdn.order.app.hd.digital/media/attachments/14738/public/63c/190/3a4/thumb_44_285_max_fit_max_1d62c22d.jpg" "img/dishes/wan-shun/stir-fried-pork.jpg"
-get_alt "https://cdn.sitedish.nl/www.mizubar.nl/img/gerechten/b7jpg.png" "https://www.mizubar.nl/www.mizubar.nl/img/gerechten/b7jpg.png" "img/dishes/mizu-bar/deluxe-box.jpg"
-get_alt "https://cdn.sitedish.nl/www.mizubar.nl/img/gerechten/b6jpg.png" "https://www.mizubar.nl/www.mizubar.nl/img/gerechten/b6jpg.png" "img/dishes/mizu-bar/vega-vis-box.jpg"
-get_alt "https://cdn.sitedish.nl/www.mizubar.nl/img/gerechten/b3jpg.png" "https://www.mizubar.nl/www.mizubar.nl/img/gerechten/b3jpg.png" "img/dishes/mizu-bar/vis-box.jpg"
-get_alt "https://cdn.sitedish.nl/www.mizubar.nl/img/gerechten/b1jpg.png" "https://www.mizubar.nl/www.mizubar.nl/img/gerechten/b1jpg.png" "img/dishes/mizu-bar/vega-box.jpg"
+# Mizu Bar's four box images 404 on both the sitedish CDN and their own
+# domain -- their menu page links files that aren't there (the names look like
+# broken uploads: "b1jpg.png"). Those four are handled in
+# download-stock-images.sh instead. Only the poke bowl actually resolves here.
 get "https://cdn.sitedish.nl/www.mizubar.nl/img/gerechten/65c13b413a4b0_Mizu_Bar-5.png" "img/dishes/mizu-bar/poke-bowl.jpg"
 get "https://www.salsashop.com/media/images/169/1.-Burrito---Chicken---LR.jpg" "img/dishes/salsa-shop/chicken-burrito.jpg"
 get "https://www.salsashop.com/media/images/37/dish-salad-chicken.jpg" "img/dishes/salsa-shop/chicken-salad.jpg"

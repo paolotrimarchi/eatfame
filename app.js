@@ -23,6 +23,14 @@
   });
 
   function money(n) { return '€' + n.toFixed(2); }
+  // Restaurants that came in direct (rather than off a marketplace listing)
+  // have no public rating, so print nothing instead of "★ null (null)".
+  // trailing=true adds the " · " separator used before the blurb.
+  function rate(r, trailing) {
+    if (r.rating === null || r.rating === undefined) return '';
+    var inner = '<span class="star">★ ' + r.rating + '</span>' + (r.reviews ? ' (' + esc(r.reviews) + ')' : '');
+    return trailing ? inner + ' · ' : '<span class="meta rate">' + inner + '</span>';
+  }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
 
   function count() {
@@ -374,7 +382,7 @@
           '<div class="rcard-from">from <b>' + money(from) + '</b></div>' +
         '</div>' +
         '<div class="chips">' +
-          '<span class="meta rate"><span class="star">★ ' + r.rating + '</span> (' + r.reviews + ')</span>' +
+          rate(r) +
           r.tags.map(function (x) { return '<span class="chip">' + esc(x) + '</span>'; }).join('') +
         '</div>' +
       '</div></button>';
@@ -426,7 +434,7 @@
             '<h1>' + esc(r.name) + '</h1>' +
             '<div class="chips">' + r.tags.map(function (x) { return '<span class="chip">' + esc(x) + '</span>'; }).join('') + '</div>' +
           '</div>' +
-          '<div class="meta"><span class="star">★ ' + r.rating + '</span> (' + r.reviews + ') · ' + esc(r.blurb) + '</div>' +
+          '<div class="meta">' + rate(r, true) + esc(r.blurb) + '</div>' +
       '</div></div>' +
       '<div class="tierbar' + (t.done ? ' done' : '') + '">' + t.text + '</div>' +
       '<div class="dishes">' + r.dishes.map(function (d) {

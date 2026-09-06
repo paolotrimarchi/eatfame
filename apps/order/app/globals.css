@@ -1,0 +1,686 @@
+/* Same design system as eatfame.com -- same fonts, colors, spacing, card
+   styles. Adapted from the main site's styles.css so the two feel identical. */
+
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/cg-italic-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: italic;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/cg-italic-600.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/cg-normal-600.woff2') format('woff2');
+}
+
+:root {
+  --green:     #05391b;
+  --green-700: #0a5228;
+  --green-500: #2f6b45;
+  --yellow:    #fffacc;
+  --surface:   #fffef6;
+  --line:      #e8dfa8;
+  --line-card: #efe7bd;
+  --muted:     #57684f;
+  --on-green:  #fffacc;
+  --on-green-2:#bfd6bd;
+  --tint:      rgba(5, 57, 27, .06);
+
+  --r-card: 26px;
+  --r-img:  18px;
+  --r-sm:   16px;
+  --pill:   999px;
+  --bar-h:  78px;
+
+  --display: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #f2ecc4;
+  color: var(--green);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+
+.app-shell {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100dvh;
+  background: var(--yellow);
+  position: relative;
+  overflow-x: hidden;
+}
+
+@media (min-width: 640px) {
+  html, body {
+    background:
+      radial-gradient(900px circle at 15% 0%, rgba(5, 57, 27, .12), transparent 60%),
+      radial-gradient(900px circle at 100% 100%, rgba(5, 57, 27, .09), transparent 55%),
+      #f2ecc4;
+  }
+  .app-shell {
+    box-shadow: 0 40px 100px -35px rgba(5, 57, 27, .4), 0 0 0 1px rgba(5, 57, 27, .05);
+  }
+}
+
+img { display: block; max-width: 100%; }
+button { font: inherit; color: inherit; border: 0; background: none; cursor: pointer; }
+a { color: var(--green); }
+
+.pad-bar { padding-bottom: calc(var(--bar-h) + 24px + env(safe-area-inset-bottom)); }
+.wrap { padding: 0 16px; }
+
+/* ---------- type ---------- */
+
+.display { font-family: var(--display); }
+
+h1 {
+  font-family: var(--display);
+  font-weight: 400;
+  font-style: italic;
+  letter-spacing: 0;
+}
+
+.eyebrow {
+  font-size: 11px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.meta { font-size: 13px; color: var(--muted); }
+.meta .star { color: var(--green); font-weight: 650; }
+
+/* ---------- buttons ---------- */
+
+.btn {
+  display: block;
+  width: 100%;
+  min-height: 54px;
+  border-radius: var(--pill);
+  background: var(--green);
+  color: var(--on-green);
+  font-size: 16.5px;
+  font-weight: 620;
+  text-align: center;
+  line-height: 54px;
+  text-decoration: none;
+  border: 0;
+  transition: background .12s ease, transform .12s ease;
+}
+.btn:active { background: var(--green-700); transform: scale(.99); }
+.btn[disabled] { background: rgba(5, 57, 27, .22); color: rgba(255, 250, 204, .8); cursor: default; }
+
+/* Secondary action: glassy white with green text/icons, for anything that
+   isn't the primary CTA on a screen (log out, save, the bottom tab bar). */
+.btn-ghost {
+  background: rgba(255, 254, 246, .8);
+  backdrop-filter: saturate(1.3) blur(10px);
+  -webkit-backdrop-filter: saturate(1.3) blur(10px);
+  color: var(--green);
+  border: 1.5px solid var(--line-card);
+}
+.btn-ghost:active { background: var(--surface); transform: scale(.99); }
+.btn-ghost[disabled] { color: rgba(5, 57, 27, .35); border-color: var(--line); cursor: default; }
+
+/* Compact sizing for buttons that shouldn't take the full-width pill
+   treatment (e.g. a form's save button rather than a page's main CTA). */
+.btn-sm {
+  display: inline-flex;
+  width: auto;
+  min-height: 40px;
+  line-height: 1;
+  padding: 0 20px;
+  font-size: 14px;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Image tile, with a graceful fallback when the file is missing. */
+.ph { position: relative; background: linear-gradient(135deg, #eaeed8, #dee5c4); overflow: hidden; }
+.ph img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ---------- brand mark ---------- */
+
+.brandmark {
+  margin: 11px 12px;
+  padding: 27px 20px 22px;
+  background: var(--green);
+  border-radius: 30px;
+  text-align: center;
+}
+.brandmark .wordmark {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 600;
+  font-size: 52px;
+  line-height: 1;
+  color: var(--on-green);
+  letter-spacing: -.01em;
+}
+
+/* In the app (as opposed to the marketing site) people already know where
+   they are, so the brand block shouldn't eat a quarter of the first screen
+   and push the menu below the fold. */
+.brandmark.compact { margin: 10px 12px 2px; padding: 15px 20px 13px; border-radius: 22px; }
+.brandmark.compact .wordmark { font-size: 28px; }
+
+/* ---------- topbar ---------- */
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  width: 100%;
+  height: 54px;
+  padding: 0 16px 0 4px;
+  text-align: left;
+  background: rgba(255, 250, 204, .93);
+  backdrop-filter: saturate(1.3) blur(10px);
+  border-bottom: 1px solid var(--line);
+  text-decoration: none;
+  color: var(--green);
+}
+.back { width: 36px; height: 44px; display: grid; place-items: center; font-size: 25px; line-height: 1; }
+.back-label { font-size: 15.5px; font-weight: 600; }
+
+.page-h {
+  font-family: var(--display);
+  font-style: normal;
+  font-weight: 600;
+  font-size: 30px;
+  margin: 18px 0 2px;
+}
+
+/* ---------- home ---------- */
+
+.hero-copy { padding: 20px 18px 4px; }
+.hero-copy h1 {
+  font-family: var(--sans);
+  font-style: normal;
+  font-weight: 700;
+  font-size: 29px;
+  line-height: 1.14;
+  letter-spacing: -.025em;
+  margin: 0 0 10px;
+}
+.hero-copy p { margin: 0; color: var(--muted); font-size: 15.5px; }
+
+.notice {
+  margin: 14px 16px 4px;
+  padding: 7px 14px;
+  border: 1px solid rgba(5, 57, 27, .18);
+  border-radius: var(--pill);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--green);
+  text-align: center;
+}
+
+.rlist { padding: 20px 16px 0; display: grid; gap: 16px; text-decoration: none; }
+.rcard {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--line-card);
+  border-radius: var(--r-card);
+  padding: 8px;
+  text-decoration: none;
+  color: var(--green);
+}
+.rcard .ph { aspect-ratio: 16 / 10; border-radius: var(--r-img); }
+.rcard-body { padding: 13px 8px 8px; }
+.rcard-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+.rcard-body h4 {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 1.05;
+  margin: 0;
+}
+.rcard-from { font-size: 13px; color: var(--muted); white-space: nowrap; flex: 0 0 auto; text-align: right; }
+.rcard-from b { font-size: 15px; font-weight: 700; color: var(--green); }
+/* A couple of dish names on the card, so picking a restaurant isn't a blind tap. */
+.rcard-peek {
+  margin: 7px 0 0;
+  font-size: 13px;
+  line-height: 1.35;
+  color: var(--muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.rcard-body .chips { margin-top: 6px; align-items: center; }
+.rate { flex: 0 0 auto; white-space: nowrap; padding-right: 2px; }
+.rate .star { font-size: 14px; }
+
+footer {
+  padding: 30px 16px calc(30px + env(safe-area-inset-bottom));
+  text-align: center;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 19px;
+  color: rgba(5, 57, 27, .45);
+}
+
+/* ---------- restaurant / menu ---------- */
+
+.rhead { padding: 12px 12px 0; }
+.rhead .ph { aspect-ratio: 2 / 1; border-radius: 24px; }
+.rhead-body { padding: 16px 6px 6px; }
+.rhead-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+}
+.rhead-body h1 {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 1.1;
+  margin: 0;
+}
+.rhead-title .chips { margin-top: 0; }
+.rhead-body .meta { margin-top: 8px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.chip {
+  font-size: 12px;
+  padding: 5px 11px;
+  border-radius: var(--pill);
+  background: var(--tint);
+  color: var(--green);
+  font-weight: 600;
+}
+
+.dishes { padding: 16px 12px 0; display: grid; gap: 12px; }
+.dish {
+  display: grid;
+  grid-template-columns: 1fr 108px;
+  gap: 14px;
+  background: var(--surface);
+  border: 1px solid var(--line-card);
+  border-radius: 24px;
+  padding: 14px;
+  align-items: stretch;
+}
+.dish-info { display: flex; flex-direction: column; min-height: 100px; }
+.dish h4 { margin: 0 0 4px; font-size: 16px; font-weight: 650; }
+.dish .desc { font-size: 12.5px; color: var(--muted); margin: 0 0 10px; line-height: 1.35; }
+.dish-foot {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.dish .price { font-size: 16.5px; font-weight: 700; line-height: 1.15; }
+.dish .price small { font-size: 11px; font-weight: 600; color: var(--muted); display: block; margin-top: 1px; }
+
+.tierbar {
+  margin: 14px 12px 0;
+  padding: 11px 16px;
+  border-radius: var(--pill);
+  background: var(--tint);
+  font-size: 13px;
+  font-weight: 620;
+  color: var(--green);
+  text-align: center;
+}
+.tierbar.done {
+  background: none;
+  color: var(--green-500);
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 8px 16px 2px;
+}
+.dish-media { display: flex; }
+.dish-media .ph { width: 100%; min-height: 108px; border-radius: var(--r-img); }
+.heat-link { font-size: 11.5px; color: var(--muted); text-decoration: underline; text-underline-offset: 2px; display: block; margin-top: 2px; }
+
+/* Heating instructions inline on the order card instead of a page trip. */
+.heat-details summary {
+  font-size: 11.5px;
+  color: var(--muted);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+  list-style: none;
+  margin-top: 2px;
+}
+.heat-details summary::-webkit-details-marker { display: none; }
+.heat-details[open] summary { margin-bottom: 4px; }
+.heat-details p {
+  margin: 0 0 6px;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--green);
+  background: var(--tint);
+  border-radius: 10px;
+  padding: 8px 10px;
+}
+
+.qty {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex: 0 0 auto;
+  background: var(--tint);
+  border-radius: var(--pill);
+}
+/* 44px is the mobile touch-target floor; these were 36 and 30. */
+.qty button { width: 44px; height: 44px; font-size: 18px; font-weight: 600; display: grid; place-items: center; color: var(--green); border-radius: var(--pill); }
+.qty .n { min-width: 14px; text-align: center; font-size: 14.5px; font-weight: 700; }
+.add {
+  flex: 0 0 auto;
+  height: 36px;
+  padding: 0 20px;
+  border-radius: var(--pill);
+  background: var(--green);
+  color: var(--on-green);
+  font-size: 14.5px;
+  font-weight: 650;
+  display: grid;
+  place-items: center;
+}
+
+/* ---------- cart ---------- */
+
+.clist {
+  background: var(--surface);
+  border: 1px solid var(--line-card);
+  border-radius: 24px;
+  padding: 2px 16px;
+  margin-top: 14px;
+}
+.citem {
+  display: grid;
+  grid-template-columns: 62px 1fr auto;
+  gap: 14px;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line-card);
+}
+.citem:last-child { border-bottom: 0; }
+.citem .ph { width: 62px; height: 62px; border-radius: var(--r-sm); }
+.citem h4 { margin: 0 0 2px; font-size: 15px; font-weight: 640; }
+.citem .from { font-size: 12.5px; color: var(--muted); }
+.citem .cprice { text-align: right; font-size: 15.5px; font-weight: 680; white-space: nowrap; }
+.qty.inline {
+  display: inline-flex;
+  margin-top: 7px;
+  background: var(--tint);
+  border-color: transparent;
+}
+.qty.inline button { width: 40px; height: 40px; font-size: 16px; }
+.qty.inline .n { font-size: 14px; }
+
+.totals { padding: 18px 0 4px; font-size: 15px; }
+.totals .row { display: flex; justify-content: space-between; padding: 6px 0; color: var(--muted); }
+.totals .row.big {
+  color: var(--green);
+  font-size: 17px;
+  font-weight: 650;
+  align-items: baseline;
+  padding-top: 14px;
+  margin-top: 8px;
+  border-top: 1px solid var(--line);
+}
+.totals .row.big .amt { font-size: 24px; font-weight: 700; letter-spacing: -.01em; }
+
+.sub-h {
+  font-size: 11px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--muted);
+  margin: 30px 0 12px;
+}
+
+.weekbar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.wk {
+  border: 1.5px solid var(--line);
+  background: var(--surface);
+  border-radius: 14px;
+  padding: 7px 2px;
+  text-align: center;
+}
+.wk.sel { border-color: var(--green); background: var(--tint); }
+.wk b { display: block; font-size: 9.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.wk span { font-size: 13px; font-weight: 700; }
+.wk.sel span { color: var(--green); }
+
+.days { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.day {
+  border: 1.5px solid var(--line);
+  background: var(--surface);
+  border-radius: 20px;
+  padding: 14px 16px;
+  text-align: left;
+  min-height: 66px;
+}
+.day.sel { border-color: var(--green); background: var(--tint); }
+.day b { display: block; font-size: 15px; font-weight: 650; }
+.day span { font-size: 12.5px; color: var(--muted); }
+
+/* ---------- long-form policy pages (privacy, terms) ---------- */
+
+.prose { padding-bottom: 60px; }
+.prose h2 { font-size: 17px; font-weight: 650; margin: 28px 0 8px; color: var(--green); }
+.prose p, .prose li { font-size: 14.5px; line-height: 1.55; color: var(--muted); margin: 0 0 10px; }
+.prose ul { padding-left: 20px; margin: 0 0 14px; }
+.prose table { width: 100%; border-collapse: collapse; margin: 10px 0 16px; font-size: 13.5px; }
+.prose th, .prose td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line-card); color: var(--muted); }
+.prose th { color: var(--green); font-weight: 650; }
+.prose .callout {
+  background: var(--tint);
+  border: 1px solid var(--line-card);
+  border-radius: var(--r-sm);
+  padding: 12px 14px;
+  margin: 4px 0 20px;
+  font-size: 14px;
+  color: var(--green);
+}
+.prose .meta { display: block; margin-bottom: 16px; }
+
+/* ---------- orders / account cards ---------- */
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line-card);
+  border-radius: var(--r-card);
+  padding: 16px;
+  margin-bottom: 14px;
+}
+
+/* ---------- forms ---------- */
+
+form { text-align: left; }
+input[type="email"] {
+  width: 100%;
+  height: 56px;
+  padding: 0 22px;
+  font-size: 16px;
+  font-family: var(--sans);
+  border: 1.5px solid var(--line);
+  border-radius: var(--pill);
+  background: var(--surface);
+  color: var(--green);
+  margin-bottom: 12px;
+}
+input[type="email"]:focus { outline: none; border-color: var(--green); }
+
+/* Chrome/Safari paint autofilled fields with their own blue/yellow tint,
+   which clashes hard with the site's cream palette. Force it back to our
+   own input surface + text color instead. */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--green);
+  -webkit-box-shadow: 0 0 0 1000px var(--surface) inset;
+  box-shadow: 0 0 0 1000px var(--surface) inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.muted { color: var(--muted); font-size: 13.5px; }
+
+/* Errors shouldn't be the same muted grey as helper text. */
+.error-msg {
+  margin: 14px 0 0;
+  padding: 10px 14px;
+  border-radius: var(--r-sm);
+  background: #fdecea;
+  border: 1px solid #f3c9c4;
+  color: #8c1d18;
+  font-size: 13.5px;
+  line-height: 1.45;
+}
+
+.skeleton {
+  background: linear-gradient(90deg, rgba(5,57,27,.06), rgba(5,57,27,.12), rgba(5,57,27,.06));
+  background-size: 200% 100%;
+  border-radius: 8px;
+  animation: shimmer 1.2s ease-in-out infinite;
+}
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ---------- bottom tab bar (home / orders / account) ---------- */
+
+/* Shared footprint for both floating bars, so they read as the same UI
+   element no matter which page you're on. */
+.bottomnav,
+.cartbar {
+  position: fixed;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  width: calc(100% - 64px);
+  max-width: 400px;
+  z-index: 30;
+}
+
+.bottomnav {
+  display: flex;
+  padding: 8px 10px calc(8px + env(safe-area-inset-bottom));
+  background: rgba(255, 254, 246, .94);
+  backdrop-filter: saturate(1.2) blur(6px);
+  -webkit-backdrop-filter: saturate(1.2) blur(6px);
+  border: 1.5px solid var(--green);
+  border-radius: var(--pill);
+  box-shadow: 0 10px 30px -8px rgba(5, 57, 27, .25);
+}
+.bottomnav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  color: rgba(5, 57, 27, .62);
+  text-decoration: none;
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 4px 0 2px;
+  border-radius: var(--pill);
+}
+.bottomnav-item svg { width: 19px; height: 19px; }
+.bottomnav-item.active {
+  color: var(--green);
+  background: var(--tint);
+}
+
+/* Basket tab: count badge sits on the icon, not the label. */
+.bn-icon { position: relative; display: inline-flex; }
+.bn-badge {
+  position: absolute;
+  top: -5px;
+  right: -9px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: var(--pill);
+  background: var(--green);
+  color: var(--on-green);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 16px;
+  text-align: center;
+}
+
+/* ---------- floating sticky cart bar (restaurant/dish/cart pages) ---------- */
+
+.cartbar .btn { display: flex; align-items: center; justify-content: space-between; overflow: hidden; padding: 0 10px 0 6px; gap: 10px; box-shadow: 0 10px 30px -8px rgba(5, 57, 27, .45); }
+.cartbar .cb-n {
+  flex: 0 0 auto;
+  width: 26px; height: 26px;
+  border-radius: var(--pill);
+  background: rgba(255, 250, 204, .2);
+  font-size: 12.5px;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  line-height: 1;
+}
+.cartbar .cb-t { flex: 0 0 auto; font-weight: 700; padding-right: 8px; }
+.cartbar .hint {
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+  background: var(--surface);
+  border: 1px solid var(--line-card);
+  border-radius: var(--pill);
+  padding: 8px 0;
+  margin-bottom: 8px;
+  font-weight: 550;
+}
+
+/* Small floating back button, replacing the old topbar on inner pages. */
+.back-fab {
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  z-index: 25;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  line-height: 1;
+  border-radius: var(--pill);
+  background: rgba(255, 250, 204, .92);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--line);
+  display: grid;
+  place-items: center;
+  font-size: 19px;
+  color: var(--green);
+  text-decoration: none;
+  cursor: pointer;
+}

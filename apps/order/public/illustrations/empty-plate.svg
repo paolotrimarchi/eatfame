@@ -1,0 +1,27 @@
+<svg width="220" height="180" viewBox="0 0 220 180" xmlns="http://www.w3.org/2000/svg">
+  <ellipse cx="110" cy="150" rx="70" ry="10" fill="#05391B" opacity="0.06"/>
+  <circle cx="110" cy="88" r="72" fill="#FFFEF6"/>
+  <circle cx="110" cy="88" r="72" fill="none" stroke="#EFE7BD" stroke-width="2"/>
+  <circle cx="110" cy="88" r="50" fill="none" stroke="#E8DFA8" stroke-width="1.5"/>
+
+  <!-- stylised pasta swirl -->
+  <path d="M78 96c0-18 14-32 32-32s28 12 28 26-12 22-24 22c-9 0-16-6-16-14 0-6 5-10 10-10 4 0 7 3 7 6"
+        fill="none" stroke="#0A5228" stroke-width="5" stroke-linecap="round"/>
+
+  <!-- basil leaf -->
+  <path d="M132 66c8-6 18-4 22 2 4 6 0 15-8 17-8 2-16-4-17-11-1-5 1-6 3-8z" fill="#2F6B45"/>
+
+  <!-- steam -->
+  <path d="M92 46c-3-6 2-9 0-15" stroke="#57684F" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.5"/>
+  <path d="M108 42c-3-6 2-9 0-15" stroke="#57684F" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.5"/>
+
+  <!-- fork -->
+  <g transform="translate(46,60)">
+    <path d="M0 0v18M4 0v18M8 0v18M4 18v26" stroke="#05391B" stroke-width="3" stroke-linecap="round"/>
+  </g>
+  <!-- spoon -->
+  <g transform="translate(168,58)">
+    <ellipse cx="0" cy="8" rx="7" ry="10" fill="none" stroke="#05391B" stroke-width="3"/>
+    <path d="M0 18v26" stroke="#05391B" stroke-width="3" stroke-linecap="round"/>
+  </g>
+</svg>

@@ -30,19 +30,24 @@ while IFS= read -r f; do
   h=$(sips -g pixelHeight "$f" 2>/dev/null | awk '/pixelHeight/{print $2}')
   [ -z "${w:-}" ] || [ -z "${h:-}" ] && { echo "  ?    $f (couldn't read dimensions)"; continue; }
 
-  if [ "$w" = "800" ] && [ "$h" = "800" ]; then
+  if [ "$w" = "$h" ] && [ "$w" -le 800 ]; then
     already=$((already+1)); continue
   fi
 
+  # Never upscale: a 440px photo blown up to 800 just gets soft and heavier.
+  # Target the smaller of 800 and the image's own short side.
+  short=$w; [ "$h" -lt "$short" ] && short=$h
+  target=800; [ "$short" -lt 800 ] && target=$short
+
   if [ "$w" -ge "$h" ]; then
-    sips --resampleHeight 800 "$f" >/dev/null 2>&1
+    sips --resampleHeight "$target" "$f" >/dev/null 2>&1
   else
-    sips --resampleWidth 800 "$f" >/dev/null 2>&1
+    sips --resampleWidth "$target" "$f" >/dev/null 2>&1
   fi
-  sips -c 800 800 "$f" >/dev/null 2>&1
+  sips -c "$target" "$target" "$f" >/dev/null 2>&1
 
   kb=$(( $(wc -c < "$f" | tr -d ' ') / 1024 ))
-  echo "  ok   $f  ${w}x${h} -> 800x800 (${kb}KB)"
+  echo "  ok   $f  ${w}x${h} -> ${target}x${target} (${kb}KB)"
   changed=$((changed+1))
 done < <(find img/dishes -name '*.jpg')
 

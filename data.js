@@ -11,40 +11,27 @@
      img/restaurants/<slug>.jpg   1200x800, ~120KB WebP or JPG
      img/dishes/<slug>/<dish>.jpg  800x800 square
 
-   Order below is a launch-priority ranking (rating × review volume,
-   with cuisine variety weighted into the first 4 so the home page
-   opens on a broad, high-trust spread before "How it works").
-   Re-sort by hand if the read on what converts changes.
+   Order below is sorted on observed demand: restaurant_viewed events in
+   PostHog over the 30 days to 6 Sept 2026, each restaurant read against
+   the slot it held at the time. Position bias is steep, so a card at
+   slot 12 earning 5 views outranks one at slot 2 earning 9.
+
+   Counts behind this order: Pasta Pasta 31, The Bab 19, Otaru Sushi 9,
+   Pind Punjabi 7, Wan Shun 7, Dolce Verona 6, Swagat 6, Gyros Republic 5,
+   Salsa Shop 5, Mizu Bar 3, Warung Mini 3, American Spareribs 3.
+
+   Two entries are placed against the raw counts on purpose:
+     - The Bab leads despite Pasta Pasta's higher count. 4.7 vs 4.3, and
+       it drew 19 from third position while Pasta Pasta had the top slot
+       working for it. Deliberate call, not a sorting error.
+     - Mizu Bar sits at 7 on a 4.8 rating, the highest on the site. It has
+       only ever been shown at slot 10, so its 3 views are untested rather
+       than weak.
+
+   Total sample was 115 events pre-launch, so everything below the top
+   three sits inside noise. Re-sort once real traffic lands.
    --------------------------------------------------------------- */
 window.RESTAURANTS = [
-  {
-    slug: 'pasta-pasta',
-    name: 'Pasta Pasta',
-    blurb: 'Fresh Italian pasta, made daily',
-    rating: 4.3,
-    reviews: '7,000+',
-    tags: ['Italian', 'Pasta'],
-    dishes: [
-      { id: 'pesto',      name: 'Pasta Pesto',       desc: 'Basil pesto, parmesan, pine nuts',    price: [15.00, 13.00, 11.00] },
-      { id: 'lasagna',    name: 'Lasagna',           desc: 'Layered pasta, ragù, béchamel, baked', price: [19.00, 16.50, 14.00] },
-      { id: 'alfredo',    name: 'Pasta Alfredo',     desc: 'Cream, butter, parmesan',              price: [16.00, 14.00, 12.00] },
-      { id: 'bolognese',  name: 'Pasta Bolognese',   desc: 'Slow-cooked beef ragù, parmesan',      price: [15.00, 13.00, 11.00] },
-    ],
-  },
-  {
-    slug: 'otaru-sushi',
-    name: 'Otaru Sushi Restaurant',
-    blurb: 'Japanese sushi, cut fresh to order',
-    rating: 4.7,
-    reviews: '5,000+',
-    tags: ['Sushi', 'Japanese', 'Asian'],
-    dishes: [
-      { id: 'avocado-tempura-maki', name: 'Avocado Tempura Maki', desc: 'Tempura avocado roll, rice, nori', price: [18.00, 16.00, 14.00] },
-      { id: 'sake-sashimi',         name: 'Sake Sashimi',         desc: 'Fresh salmon sashimi, thick cut',  price: [12.00, 10.00,  8.00] },
-      { id: 'spicy-tekka-maki',     name: 'Spicy Tekka Maki',     desc: 'Spicy tuna roll, rice, nori',      price: [16.00, 14.00, 12.00] },
-      { id: 'sake-set',             name: 'Sake Set',             desc: 'Salmon nigiri and sashimi selection', price: [19.00, 16.50, 14.00] },
-    ],
-  },
   {
     slug: 'the-bab',
     name: 'The Bab',
@@ -60,57 +47,17 @@ window.RESTAURANTS = [
     ],
   },
   {
-    slug: 'swagat',
-    name: 'Swagat Restaurant',
-    blurb: 'North Indian comfort food',
-    rating: 4.6,
-    reviews: '2,000+',
-    tags: ['Indian', 'Comfort food'],
-    dishes: [
-      { id: 'tikka-masala', name: 'Chicken Tikka Masala', desc: 'Grilled chicken, spiced tomato gravy', price: [20.00, 17.50, 15.00] },
-      { id: 'saag-paneer',  name: 'Saag Paneer',          desc: 'Paneer, spinach, garlic, cream',       price: [19.00, 16.50, 14.00] },
-      { id: 'dal-makhni',   name: 'Dal Makhni',           desc: 'Black lentils, butter, cream',         price: [19.00, 16.50, 14.00] },
-    ],
-  },
-  {
-    slug: 'dolce-verona',
-    name: 'Dolce Verona',
-    blurb: 'Italian trattoria, pasta and pizza',
-    rating: 4.7,
-    reviews: '4,000+',
-    tags: ['Italian', 'Pizza', 'Pasta'],
-    dishes: [
-      { id: 'lasagna',        name: 'Lasagna',         desc: 'Layered pasta, ragù, béchamel',   price: [17.00, 15.00, 13.00] },
-      { id: 'carpaccio',      name: 'Carpaccio',       desc: 'Thin-sliced beef, arugula, parmesan', price: [16.00, 14.00, 12.00] },
-      { id: 'vitello-tonnato',name: 'Vitello Tonnato',  desc: 'Sliced veal, tuna sauce, capers',     price: [17.00, 15.00, 13.00] },
-      { id: 'pollo-genovese', name: 'Pollo Genoverse',  desc: 'Chicken, Genovese-style, herbs',      price: [20.00, 17.50, 15.00] },
-    ],
-  },
-  {
-    slug: 'warung-mini',
-    name: 'Warung Mini',
-    blurb: 'Indonesian warung, rice plates',
-    rating: 4.6,
-    reviews: '3,000+',
-    tags: ['Indonesian', 'Sandwich'],
-    dishes: [
-      { id: 'rice-rendang',        name: 'Rice Rendang',         desc: 'Rice, slow-cooked beef rendang',   price: [16.00, 13.50, 11.00] },
-      { id: 'rice-beans-chicken',  name: 'Rice Beans & Chicken', desc: 'Rice, long beans, spiced chicken', price: [16.00, 13.50, 11.00] },
-      { id: 'rice-rames',          name: 'Rice Rames',           desc: 'Rice, mixed sides, sambal',        price: [17.00, 14.50, 12.00] },
-    ],
-  },
-  {
-    slug: 'salsa-shop',
-    name: 'Salsa Shop',
-    blurb: 'Mexican tacos and bowls',
+    slug: 'pasta-pasta',
+    name: 'Pasta Pasta',
+    blurb: 'Fresh Italian pasta, made daily',
     rating: 4.3,
-    reviews: '2,000+',
-    tags: ['Mexican', 'Tex Mex', 'Halal'],
+    reviews: '7,000+',
+    tags: ['Italian', 'Pasta'],
     dishes: [
-      { id: 'chicken-tacos',     name: 'Chicken Tacos',           desc: 'Grilled chicken tacos, salsa, lime', price: [14.00, 11.50,  9.00] },
-      { id: 'chicken-bowl',      name: 'Chicken Bowl',            desc: 'Rice bowl, chicken, beans, salsa',   price: [14.00, 11.50,  9.00] },
-      { id: 'real-tacos',        name: 'Real Tacos',              desc: 'Tacos, slow-cooked meat, salsa',     price: [12.00, 10.00,  8.00] },
-      { id: 'veggie-chili-bowl', name: 'Vegetarian Chili Bowl',   desc: 'Chili sin carne, beans, rice',       price: [13.00, 11.00,  9.00] },
+      { id: 'pesto',      name: 'Pasta Pesto',       desc: 'Basil pesto, parmesan, pine nuts',    price: [15.00, 13.00, 11.00] },
+      { id: 'lasagna',    name: 'Lasagna',           desc: 'Layered pasta, ragù, béchamel, baked', price: [19.00, 16.50, 14.00] },
+      { id: 'alfredo',    name: 'Pasta Alfredo',     desc: 'Cream, butter, parmesan',              price: [16.00, 14.00, 12.00] },
+      { id: 'bolognese',  name: 'Pasta Bolognese',   desc: 'Slow-cooked beef ragù, parmesan',      price: [15.00, 13.00, 11.00] },
     ],
   },
   {
@@ -128,6 +75,20 @@ window.RESTAURANTS = [
     ],
   },
   {
+    slug: 'otaru-sushi',
+    name: 'Otaru Sushi Restaurant',
+    blurb: 'Japanese sushi, cut fresh to order',
+    rating: 4.7,
+    reviews: '5,000+',
+    tags: ['Sushi', 'Japanese', 'Asian'],
+    dishes: [
+      { id: 'avocado-tempura-maki', name: 'Avocado Tempura Maki', desc: 'Tempura avocado roll, rice, nori', price: [18.00, 16.00, 14.00] },
+      { id: 'sake-sashimi',         name: 'Sake Sashimi',         desc: 'Fresh salmon sashimi, thick cut',  price: [12.00, 10.00,  8.00] },
+      { id: 'spicy-tekka-maki',     name: 'Spicy Tekka Maki',     desc: 'Spicy tuna roll, rice, nori',      price: [16.00, 14.00, 12.00] },
+      { id: 'sake-set',             name: 'Sake Set',             desc: 'Salmon nigiri and sashimi selection', price: [19.00, 16.50, 14.00] },
+    ],
+  },
+  {
     slug: 'wan-shun',
     name: 'Wan Shun Restaurant',
     blurb: 'Chinese kitchen, rice bowls and stir-fry',
@@ -139,6 +100,20 @@ window.RESTAURANTS = [
       { id: 'poached-pork',       name: 'Poached Sliced Pork',       desc: 'Poached pork, garlic chilli sauce',           price: [20.00, 17.50, 15.00] },
       { id: 'stir-fried-pork',    name: 'Stir Fried Pork In Batter', desc: 'Battered pork, sweet and sour glaze',         price: [20.00, 17.50, 15.00] },
       { id: 'sweet-sour-chicken', name: 'Sweet Sour Chicken Set',    desc: 'Chicken, sweet and sour sauce, rice',         price: [19.00, 16.50, 14.00] },
+    ],
+  },
+  {
+    slug: 'gyros-republic',
+    name: 'Gyros Republic',
+    blurb: 'Greek street food',
+    rating: 4.4,
+    reviews: '270+',
+    tags: ['Greek', 'Mediterranean'],
+    dishes: [
+      { id: 'pork-pita',    name: 'Pork Gyros Pita',     desc: 'Pita, pork gyros, tzatziki, fries',    price: [12.00, 10.50,  9.00] },
+      { id: 'pork-plate',   name: 'Pork Gyros Plate',    desc: 'Pork gyros, fries, salad, tzatziki',   price: [18.00, 16.00, 14.00] },
+      { id: 'chick-pita',   name: 'Chicken Gyros Pita',  desc: 'Pita, chicken gyros, tzatziki, fries', price: [13.00, 11.50, 10.00] },
+      { id: 'chick-plate',  name: 'Chicken Gyros Plate', desc: 'Chicken gyros, fries, salad, tzatziki',price: [18.50, 16.50, 14.50] },
     ],
   },
   {
@@ -156,6 +131,60 @@ window.RESTAURANTS = [
     ],
   },
   {
+    slug: 'dolce-verona',
+    name: 'Dolce Verona',
+    blurb: 'Italian trattoria, pasta and pizza',
+    rating: 4.7,
+    reviews: '4,000+',
+    tags: ['Italian', 'Pizza', 'Pasta'],
+    dishes: [
+      { id: 'lasagna',        name: 'Lasagna',         desc: 'Layered pasta, ragù, béchamel',   price: [17.00, 15.00, 13.00] },
+      { id: 'carpaccio',      name: 'Carpaccio',       desc: 'Thin-sliced beef, arugula, parmesan', price: [16.00, 14.00, 12.00] },
+      { id: 'vitello-tonnato',name: 'Vitello Tonnato',  desc: 'Sliced veal, tuna sauce, capers',     price: [17.00, 15.00, 13.00] },
+      { id: 'pollo-genovese', name: 'Pollo Genoverse',  desc: 'Chicken, Genovese-style, herbs',      price: [20.00, 17.50, 15.00] },
+    ],
+  },
+  {
+    slug: 'swagat',
+    name: 'Swagat Restaurant',
+    blurb: 'North Indian comfort food',
+    rating: 4.6,
+    reviews: '2,000+',
+    tags: ['Indian', 'Comfort food'],
+    dishes: [
+      { id: 'tikka-masala', name: 'Chicken Tikka Masala', desc: 'Grilled chicken, spiced tomato gravy', price: [20.00, 17.50, 15.00] },
+      { id: 'saag-paneer',  name: 'Saag Paneer',          desc: 'Paneer, spinach, garlic, cream',       price: [19.00, 16.50, 14.00] },
+      { id: 'dal-makhni',   name: 'Dal Makhni',           desc: 'Black lentils, butter, cream',         price: [19.00, 16.50, 14.00] },
+    ],
+  },
+  {
+    slug: 'salsa-shop',
+    name: 'Salsa Shop',
+    blurb: 'Mexican tacos and bowls',
+    rating: 4.3,
+    reviews: '2,000+',
+    tags: ['Mexican', 'Tex Mex', 'Halal'],
+    dishes: [
+      { id: 'chicken-tacos',     name: 'Chicken Tacos',           desc: 'Grilled chicken tacos, salsa, lime', price: [14.00, 11.50,  9.00] },
+      { id: 'chicken-bowl',      name: 'Chicken Bowl',            desc: 'Rice bowl, chicken, beans, salsa',   price: [14.00, 11.50,  9.00] },
+      { id: 'real-tacos',        name: 'Real Tacos',              desc: 'Tacos, slow-cooked meat, salsa',     price: [12.00, 10.00,  8.00] },
+      { id: 'veggie-chili-bowl', name: 'Vegetarian Chili Bowl',   desc: 'Chili sin carne, beans, rice',       price: [13.00, 11.00,  9.00] },
+    ],
+  },
+  {
+    slug: 'warung-mini',
+    name: 'Warung Mini',
+    blurb: 'Indonesian warung, rice plates',
+    rating: 4.6,
+    reviews: '3,000+',
+    tags: ['Indonesian', 'Sandwich'],
+    dishes: [
+      { id: 'rice-rendang',        name: 'Rice Rendang',         desc: 'Rice, slow-cooked beef rendang',   price: [16.00, 13.50, 11.00] },
+      { id: 'rice-beans-chicken',  name: 'Rice Beans & Chicken', desc: 'Rice, long beans, spiced chicken', price: [16.00, 13.50, 11.00] },
+      { id: 'rice-rames',          name: 'Rice Rames',           desc: 'Rice, mixed sides, sambal',        price: [17.00, 14.50, 12.00] },
+    ],
+  },
+  {
     slug: 'american-spareribs',
     name: 'American Spareribs',
     blurb: 'Slow-cooked ribs and wings',
@@ -167,20 +196,6 @@ window.RESTAURANTS = [
       { id: 'honey-spareribs',   name: 'Honey Spareribs',   desc: 'Pork ribs, honey glaze',           price: [21.00, 18.50, 16.00] },
       { id: 'spareribs-hawaii',  name: 'Spareribs Hawai',   desc: 'Pork ribs, pineapple glaze',       price: [21.00, 18.50, 16.00] },
       { id: 'hotwings',          name: 'Hotwings',          desc: 'Chicken wings, hot sauce',         price: [13.00, 10.50,  8.00] },
-    ],
-  },
-  {
-    slug: 'gyros-republic',
-    name: 'Gyros Republic',
-    blurb: 'Greek street food',
-    rating: 4.4,
-    reviews: '270+',
-    tags: ['Greek', 'Mediterranean'],
-    dishes: [
-      { id: 'pork-pita',    name: 'Pork Gyros Pita',     desc: 'Pita, pork gyros, tzatziki, fries',    price: [12.00, 10.50,  9.00] },
-      { id: 'pork-plate',   name: 'Pork Gyros Plate',    desc: 'Pork gyros, fries, salad, tzatziki',   price: [18.00, 16.00, 14.00] },
-      { id: 'chick-pita',   name: 'Chicken Gyros Pita',  desc: 'Pita, chicken gyros, tzatziki, fries', price: [13.00, 11.50, 10.00] },
-      { id: 'chick-plate',  name: 'Chicken Gyros Plate', desc: 'Chicken gyros, fries, salad, tzatziki',price: [18.50, 16.50, 14.50] },
     ],
   },
   {

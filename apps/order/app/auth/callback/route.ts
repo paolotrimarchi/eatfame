@@ -1,30 +1,48 @@
 import { createClient } from '@/lib/supabase/server';
-import { NextResponse } from 'next/server';
+import { type EmailOtpType } from '@supabase/supabase-js';
+import { redirect } from 'next/navigation';
 
-// The link in the magic-link email points here with a one-time `code`.
-// Exchange it for a real session, then send the user back to wherever they
-// started logging in from (e.g. mid-checkout on /cart), defaulting home.
+// Where the magic-link email lands. The email carries a `token_hash` that we
+// generated server-side, so verification happens here, on our own domain,
+// and the session cookie is set before the redirect.
+//
+// Uses redirect() from next/navigation rather than NextResponse.redirect on
+// purpose: verifyOtp writes the session cookie into the *pending* response,
+// and building a fresh NextResponse would throw that away, logging the user
+// straight back out again.
 export async function GET(request: Request) {
-  const { searchParams, origin } = new URL(request.url);
-  const code = searchParams.get('code');
+  const { searchParams } = new URL(request.url);
 
   const next = searchParams.get('next') || '/';
   const safeNext = next.startsWith('/') ? next : '/'; // never redirect off-site
-
-  // A used or expired link used to fail silently here and dump people on the
-  // home page, logged out, with no idea why. Send them back to login with
-  // something to read instead.
-  if (!code) {
-    return NextResponse.redirect(`${origin}/login?expired=1&next=${encodeURIComponent(safeNext)}`);
-  }
+  const loginAgain = `/login?expired=1&next=${encodeURIComponent(safeNext)}`;
 
   const supabase = createClient();
-  const { error } = await supabase.auth.exchangeCodeForSession(code);
 
-  if (error) {
-    console.error('auth/callback: code exchange failed', error.message);
-    return NextResponse.redirect(`${origin}/login?expired=1&next=${encodeURIComponent(safeNext)}`);
+  const tokenHash = searchParams.get('token_hash');
+  const type = searchParams.get('type') as EmailOtpType | null;
+
+  if (tokenHash && type) {
+    const { error } = await supabase.auth.verifyOtp({ type, token_hash: tokenHash });
+    if (error) {
+      console.error('auth/callback: verifyOtp failed —', error.message);
+      redirect(loginAgain);
+    }
+    redirect(safeNext);
   }
 
-  return NextResponse.redirect(`${origin}${safeNext}`);
+  // Older emails (and Supabase's own hosted flow) arrive with ?code= instead.
+  // Kept so links already sitting in someone's inbox don't dead-end.
+  const code = searchParams.get('code');
+  if (code) {
+    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    if (error) {
+      console.error('auth/callback: code exchange failed —', error.message);
+      redirect(loginAgain);
+    }
+    redirect(safeNext);
+  }
+
+  console.error('auth/callback: no token_hash or code on the request');
+  redirect(loginAgain);
 }

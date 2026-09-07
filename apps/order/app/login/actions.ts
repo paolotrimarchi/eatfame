@@ -21,17 +21,25 @@ export async function requestMagicLink(email: string, next: string = '/'): Promi
   const { data, error } = await admin.auth.admin.generateLink({
     type: 'magiclink',
     email,
-    options: {
-      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback?next=${encodeURIComponent(safeNext)}`,
-    },
   });
 
-  if (error || !data?.properties?.action_link) {
+  if (error || !data?.properties?.hashed_token) {
     return { ok: false, message: error?.message ?? 'Could not generate a login link.' };
   }
 
+  // Deliberately NOT using data.properties.action_link. That link goes to
+  // Supabase's own /auth/v1/verify, which then bounces back with the tokens
+  // in the URL *fragment* -- and a fragment never reaches the server, so our
+  // callback saw no code and treated every login as expired. Sending people
+  // straight to our own callback with the hashed token instead means the
+  // token arrives server-side, where verifyOtp can set the session cookie.
+  const link =
+    `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback` +
+    `?token_hash=${encodeURIComponent(data.properties.hashed_token)}` +
+    `&type=magiclink&next=${encodeURIComponent(safeNext)}`;
+
   try {
-    await sendMagicLinkEmail(email, data.properties.action_link);
+    await sendMagicLinkEmail(email, link);
   } catch (err) {
     console.error('requestMagicLink: Resend send failed', err);
     return { ok: false, message: 'Could not send the login email. Try again in a moment.' };

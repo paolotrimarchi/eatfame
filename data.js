@@ -30,6 +30,9 @@
 
    Total sample was 115 events pre-launch, so everything below the top
    three sits inside noise. Re-sort once real traffic lands.
+
+   Thai Deum sits at 5 by request, not by data -- it's new, so it has no
+   view history at all. Everything from Wan Shun down shifted one place.
    --------------------------------------------------------------- */
 window.RESTAURANTS = [
   {
@@ -108,6 +111,33 @@ window.RESTAURANTS = [
       { id: 'spicy-scallop-maki',      name: 'Spicy Scallop Maki',                desc: 'Scallop, spring onion, cucumber, spicy sauce',        price: [14.50, 12.75, 11.00] },
       { id: 'philadelphia-maki',       name: 'Philadelphia Maki',                 desc: 'Salmon, cream cheese, avocado',                       price: [13.50, 11.75, 10.25] },
       { id: 'sea-king-maki',           name: 'Sea King Maki',                     desc: 'Salmon, tuna, cucumber, omelet, ikura, roe',          price: [16.50, 14.50, 12.50] },
+    ],
+  },
+  {
+    slug: 'thai-deum',
+    name: 'Thai Deum',
+    blurb: 'Thai specialities, Ceintuurbaan',
+    rating: 4.4,
+    reviews: '200+',
+    tags: ['Thai', 'Curry', 'Asian'],
+    // Two starters plus chicken and beef mains, per Paolo. Prices are Thai
+    // Deum's own menu prices (thaideum.com/menu) at the 2-dish tier.
+    //
+    // Their menu charges €2.50 extra for rice; we include it and absorb that,
+    // so the descriptions say "with rice" and the price is unchanged.
+    //
+    // Photo-backed only. Their gallery is heavily chicken and vegetarian, so
+    // beef stops at two: the oyster-sauce stir-fry and the beef salad. Garlic,
+    // basil and sweet-and-sour beef are all on their menu but have no photo,
+    // and Thai stir-fries look alike enough that borrowing one would be a lie.
+    dishes: [
+      { id: 'veg-spring-rolls',    name: 'Vegetable Spring Rolls', desc: 'Five rolls, sweet chilli sauce',                    price: [7.00, 6.25, 5.25] },
+      { id: 'tofu-satay',          name: 'Tofu Satay',             desc: 'Five skewers, peanut sauce, cucumber relish',       price: [6.50, 5.75, 5.00] },
+      { id: 'cashew-nut-chicken',  name: 'Cashew Nut Chicken',     desc: 'Cashews, spring onion, leek and carrot, with rice',  price: [17.25, 15.00, 13.00] },
+      { id: 'red-curry-chicken',   name: 'Chicken Red Curry',      desc: 'Coconut milk, bamboo, Thai basil, spicy, with rice', price: [18.95, 16.50, 14.25] },
+      { id: 'green-curry-chicken', name: 'Chicken Green Curry',    desc: 'Coconut milk, long beans, basil, spicy, with rice',  price: [18.95, 16.50, 14.25] },
+      { id: 'beef-oyster-sauce',   name: 'Beef in Oyster Sauce',   desc: 'Peppers, spring onion, mushroom, with rice',         price: [19.95, 17.50, 15.00] },
+      { id: 'spicy-beef-salad',    name: 'Spicy Beef Salad',       desc: 'Sliced beef, red onion, coriander, chilli',          price: [20.50, 18.00, 15.50] },
     ],
   },
   {

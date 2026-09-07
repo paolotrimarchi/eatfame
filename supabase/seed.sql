@@ -7,17 +7,18 @@ insert into restaurants (slug, name, blurb, rating, reviews, tags, image_path, s
   ('pasta-pasta',          'Pasta Pasta',              'Fresh Italian pasta, made daily',            4.3, '7,000+', array['Italian','Pasta'],               'img/restaurants/pasta-pasta.jpg', 2),
   ('otaru-sushi',          'Otaru Sushi Restaurant',   'Japanese sushi, cut fresh to order',          4.7, '5,000+', array['Sushi','Japanese','Asian'],      'img/restaurants/otaru-sushi.jpg', 4),
   ('the-bab',              'The Bab',                  'Korean comfort food',                         4.7, '2,000+', array['Korean','Asian','BBQ'],          'img/restaurants/the-bab.jpg', 1),
-  ('swagat',               'Swagat Restaurant',        'North Indian comfort food',                   4.6, '2,000+', array['Indian','Comfort food'],         'img/restaurants/swagat.jpg', 9),
-  ('dolce-verona',         'Dolce Verona',             'Italian trattoria, pasta and pizza',           4.7, '4,000+', array['Italian','Pizza','Pasta'],       'img/restaurants/dolce-verona.jpg', 8),
-  ('warung-mini',          'Warung Mini',              'Indonesian warung, rice plates',               4.6, '3,000+', array['Indonesian','Sandwich'],         'img/restaurants/warung-mini.jpg', 11),
-  ('salsa-shop',           'Salsa Shop',               'Mexican tacos and bowls',                      4.3, '2,000+', array['Mexican','Tex Mex','Halal'],     'img/restaurants/salsa-shop.jpg', 10),
+  ('swagat',               'Swagat Restaurant',        'North Indian comfort food',                   4.6, '2,000+', array['Indian','Comfort food'],         'img/restaurants/swagat.jpg', 10),
+  ('dolce-verona',         'Dolce Verona',             'Italian trattoria, pasta and pizza',           4.7, '4,000+', array['Italian','Pizza','Pasta'],       'img/restaurants/dolce-verona.jpg', 9),
+  ('warung-mini',          'Warung Mini',              'Indonesian warung, rice plates',               4.6, '3,000+', array['Indonesian','Sandwich'],         'img/restaurants/warung-mini.jpg', 12),
+  ('salsa-shop',           'Salsa Shop',               'Mexican tacos and bowls',                      4.3, '2,000+', array['Mexican','Tex Mex','Halal'],     'img/restaurants/salsa-shop.jpg', 11),
   ('pind-punjabi',         'Pind Punjabi',             'North Indian, Punjabi kitchen',                4.6, '900+',   array['Indian','Chicken'],              'img/restaurants/pind-punjabi.jpg', 3),
-  ('wan-shun',             'Wan Shun Restaurant',      'Chinese kitchen, rice bowls and stir-fry',     4.7, '1,500+', array['Chinese','Rice bowls'],          'img/restaurants/wan-shun.jpg', 5),
-  ('mizu-bar',             'Mizu Bar',                 'Asian fusion, sushi and rice boxes',           4.8, '1,000+', array['Japanese','Asian fusion','Sushi'],'img/restaurants/mizu-bar.jpg', 7),
-  ('american-spareribs',   'American Spareribs',       'Slow-cooked ribs and wings',                   4.4, '1,000+', array['American','Wings'],              'img/restaurants/american-spareribs.jpg', 12),
-  ('gyros-republic',       'Gyros Republic',           'Greek street food',                            4.4, '270+',   array['Greek','Mediterranean'],         'img/restaurants/gyros-republic.jpg', 6),
-  ('gnoccheria',           'Gnoccheria',               'Fresh gnocchi, made daily',                    4.7, '330+',   array['Italian','Pasta','Vegetarian'],  'img/restaurants/gnoccheria.jpg', 13),
-  ('momo-tibet',           'Momo Tibet',               'Tibetan kitchen, momo folded by hand',         4.1, '150+',   array['Tibetan','Noodles'],      'img/restaurants/momo-tibet.jpg', 14)
+  ('thai-deum',            'Thai Deum',                'Thai specialities, Ceintuurbaan',              4.4, '200+',   array['Thai','Curry','Asian'],          'img/restaurants/thai-deum.jpg', 5),
+  ('wan-shun',             'Wan Shun Restaurant',      'Chinese kitchen, rice bowls and stir-fry',     4.7, '1,500+', array['Chinese','Rice bowls'],          'img/restaurants/wan-shun.jpg', 6),
+  ('mizu-bar',             'Mizu Bar',                 'Asian fusion, sushi and rice boxes',           4.8, '1,000+', array['Japanese','Asian fusion','Sushi'],'img/restaurants/mizu-bar.jpg', 8),
+  ('american-spareribs',   'American Spareribs',       'Slow-cooked ribs and wings',                   4.4, '1,000+', array['American','Wings'],              'img/restaurants/american-spareribs.jpg', 13),
+  ('gyros-republic',       'Gyros Republic',           'Greek street food',                            4.4, '270+',   array['Greek','Mediterranean'],         'img/restaurants/gyros-republic.jpg', 7),
+  ('gnoccheria',           'Gnoccheria',               'Fresh gnocchi, made daily',                    4.7, '330+',   array['Italian','Pasta','Vegetarian'],  'img/restaurants/gnoccheria.jpg', 14),
+  ('momo-tibet',           'Momo Tibet',               'Tibetan kitchen, momo folded by hand',         4.1, '150+',   array['Tibetan','Noodles'],      'img/restaurants/momo-tibet.jpg', 15)
 on conflict (slug) do nothing;
 
 -- dishes: (restaurant slug, dish slug, name, description, price@2, price@3, price@4, image path)
@@ -102,6 +103,17 @@ with d (rslug, dslug, name, description, p2, p3, p4) as (
     ('otaru-sushi','sea-king-maki','Sea King Maki','Salmon, tuna, cucumber, omelet, ikura, roe',16.50,14.50,12.50),
     ('otaru-sushi','avocado-tempura-maki','Avocado Tempura Maki','Deep-fried prawns, avocado, cucumber, fish roe',15.00,13.25,11.25),
     ('otaru-sushi','spicy-tekka-maki','Spicy Tekka Maki','Tuna, spring onion, cucumber, spicy sauce',13.50,11.75,10.25),
+    -- Thai Deum: two starters plus chicken and beef. Their menu prices rice
+    -- separately (€2.50); we include it, so descriptions say "with rice" and
+    -- the price is their menu price unchanged.
+    ('thai-deum','veg-spring-rolls','Vegetable Spring Rolls','Five rolls, sweet chilli sauce',7.00,6.25,5.25),
+    ('thai-deum','tofu-satay','Tofu Satay','Five skewers, peanut sauce, cucumber relish',6.50,5.75,5.00),
+    ('thai-deum','cashew-nut-chicken','Cashew Nut Chicken','Cashews, spring onion, leek and carrot, with rice',17.25,15.00,13.00),
+    ('thai-deum','red-curry-chicken','Chicken Red Curry','Coconut milk, bamboo, Thai basil, spicy, with rice',18.95,16.50,14.25),
+    ('thai-deum','green-curry-chicken','Chicken Green Curry','Coconut milk, long beans, basil, spicy, with rice',18.95,16.50,14.25),
+    ('thai-deum','beef-oyster-sauce','Beef in Oyster Sauce','Peppers, spring onion, mushroom, with rice',19.95,17.50,15.00),
+    ('thai-deum','spicy-beef-salad','Spicy Beef Salad','Sliced beef, red onion, coriander, chilli',20.50,18.00,15.50),
+
     ('wan-shun','kung-pao-chicken','Kung Pao Chicken','Leek, peanuts, sweet-sour, lightly spicy',23.00,20.25,17.25),
     ('wan-shun','yuxiang-shredded-pork','Yuxiang Shredded Pork','Coriander, carrot, black fungus, sweet-sour',23.00,20.25,17.25),
     ('wan-shun','muxu-pork','Muxu Pork','Sliced pork, egg, black fungus',23.00,20.25,17.25),

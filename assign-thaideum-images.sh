@@ -74,22 +74,11 @@ assign 9.jpg                 red-curry-chicken   "red curry, bamboo shoots, pea 
 assign 8.jpg                 beef-oyster-sauce   "beef with peppers, spring onion and mushroom"
 assign 4.jpg                 spicy-beef-salad    "sliced grilled beef, red onion, coriander, chilli"
 
-# Restaurant card is 3:2, not square -- crop separately.
+# The restaurant card is built separately -- it's a mosaic of six of these
+# dishes rather than a single crop, which needs compositing that sips can't
+# do. See build-restaurant-cards.py.
 echo
-echo "Restaurant card:"
-CARD="img/restaurants/thai-deum.jpg"
-mkdir -p img/restaurants
-if cp "$SRC/image4-1-2.jpeg" "$CARD" 2>/dev/null; then
-  if command -v sips >/dev/null 2>&1; then
-    # 640x480 -> 640x427 keeps full width and trims top/bottom to 3:2.
-    sips -c 427 640 "$CARD" >/dev/null 2>&1
-    echo "  ok   $CARD (640x427)"
-  else
-    echo "  ok   $CARD (uncropped, sips not found)"
-  fi
-else
-  echo "  FAIL $CARD"
-fi
+echo "Restaurant card: run  python3 build-restaurant-cards.py"
 
 echo
 echo "Done. Staged originals are still in $SRC if you want to redo a mapping."

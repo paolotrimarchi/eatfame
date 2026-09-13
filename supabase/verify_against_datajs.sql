@@ -125,7 +125,13 @@ with expected (rslug, dslug, name, description, p2, p3, p4) as (
     ('thai-deum','red-curry-chicken','Chicken Red Curry','Coconut milk, bamboo, Thai basil, spicy, with rice',18.95,16.50,14.25),
     ('thai-deum','green-curry-chicken','Chicken Green Curry','Coconut milk, long beans, basil, spicy, with rice',18.95,16.50,14.25),
     ('thai-deum','beef-oyster-sauce','Beef in Oyster Sauce','Peppers, spring onion, mushroom, with rice',19.95,17.50,15.00),
-    ('thai-deum','spicy-beef-salad','Spicy Beef Salad','Sliced beef, red onion, coriander, chilli',20.50,18.00,15.50)
+    ('thai-deum','spicy-beef-salad','Spicy Beef Salad','Sliced beef, red onion, coriander, chilli',20.50,18.00,15.50),
+    ('abyssinia','zegni','Zegni','Slow-cooked beef in berbere, with teff injera',18.00,15.75,13.50),
+    ('abyssinia','tebsi','Tebsi','Sautéed beef, peppers, onion, with teff injera',19.00,16.75,14.25),
+    ('abyssinia','doro-tebsi','Doro Tebsi','Sautéed chicken, peppers, onion, with teff injera',16.50,14.50,12.50),
+    ('abyssinia','hamli','Hamli','Collard greens, garlic and spices, vegan',15.50,13.50,11.75),
+    ('abyssinia','temtemo','Temtemo','Spiced red lentil stew, vegan',15.50,13.50,11.75),
+    ('abyssinia','duba','Duba','Pumpkin stew with herbs and spices, vegan',15.50,13.50,11.75)
 ),
 expected_restaurants (slug, name, rating, reviews, tags, sort_order) as (
   values
@@ -134,16 +140,17 @@ expected_restaurants (slug, name, rating, reviews, tags, sort_order) as (
     ('pind-punjabi','Pind Punjabi',4.6,'900+',array['Indian','Chicken'],3),
     ('otaru-sushi','Otaru Sushi Restaurant',4.7,'5,000+',array['Sushi','Japanese','Asian'],4),
     ('thai-deum','Thai Deum',4.4,'200+',array['Thai','Curry','Asian'],5),
-    ('wan-shun','Wan Shun Restaurant',4.7,'1,500+',array['Chinese','Rice bowls'],6),
-    ('gyros-republic','Gyros Republic',4.4,'270+',array['Greek','Mediterranean'],7),
-    ('mizu-bar','Mizu Bar',4.8,'1,000+',array['Japanese','Asian fusion','Sushi'],8),
-    ('dolce-verona','Dolce Verona',4.7,'4,000+',array['Italian','Pizza','Pasta'],9),
-    ('swagat','Swagat Restaurant',4.6,'2,000+',array['Indian','Comfort food'],10),
-    ('salsa-shop','Salsa Shop',4.3,'2,000+',array['Mexican','Tex Mex','Halal'],11),
-    ('warung-mini','Warung Mini',4.6,'3,000+',array['Indonesian','Sandwich'],12),
-    ('american-spareribs','American Spareribs',4.4,'1,000+',array['American','Wings'],13),
-    ('gnoccheria','Gnoccheria',4.7,'330+',array['Italian','Pasta','Vegetarian'],14),
-    ('momo-tibet','Momo Tibet',4.1,'150+',array['Tibetan','Noodles'],15)
+    ('abyssinia','Abyssinia',4.4,'2,000+',array['Ethiopian','Eritrean','Vegan'],6),
+    ('wan-shun','Wan Shun Restaurant',4.7,'1,500+',array['Chinese','Rice bowls'],7),
+    ('gyros-republic','Gyros Republic',4.4,'270+',array['Greek','Mediterranean'],8),
+    ('mizu-bar','Mizu Bar',4.8,'1,000+',array['Japanese','Asian fusion','Sushi'],9),
+    ('dolce-verona','Dolce Verona',4.7,'4,000+',array['Italian','Pizza','Pasta'],10),
+    ('swagat','Swagat Restaurant',4.6,'2,000+',array['Indian','Comfort food'],11),
+    ('salsa-shop','Salsa Shop',4.3,'2,000+',array['Mexican','Tex Mex','Halal'],12),
+    ('warung-mini','Warung Mini',4.6,'3,000+',array['Indonesian','Sandwich'],13),
+    ('american-spareribs','American Spareribs',4.4,'1,000+',array['American','Wings'],14),
+    ('gnoccheria','Gnoccheria',4.7,'330+',array['Italian','Pasta','Vegetarian'],15),
+    ('momo-tibet','Momo Tibet',4.1,'150+',array['Tibetan','Noodles'],16)
 )
 
 select 'MISSING FROM DB' as issue, e.rslug as restaurant, e.dslug as dish, null::text as detail

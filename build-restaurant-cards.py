@@ -27,19 +27,31 @@ MAX_KB = 220         # keep cards in the same weight class as the rest of img/
 SOURCES = {
     "thai-deum": "thai-deum-card-source.jpeg",
     "momo-tibet": "momo-tibet-card-source.jpeg",
+    # Abyssinia's is their real banner photo, 2200x480. It's their own food, so
+    # it's worth keeping even though it can't reach 1200x800 -- see fit().
+    "abyssinia": "abyssinia-card-source.jpg",
 }
 
 
 def fit(src: Path) -> Image.Image:
-    """Scale to cover 1200x800 and centre-crop. Sources that are already 3:2
-    come through as a pure resize with nothing trimmed."""
+    """Crop to 3:2 at up to 1200x800, centred.
+
+    Never upscales. A source shorter than 800px comes out smaller than the
+    other cards rather than soft and stretched -- Abyssinia's 2200x480 banner
+    lands at 720x480, which is sharp at the size a card actually renders."""
     im = Image.open(src).convert("RGB")
     sw, sh = im.size
-    scale = max(CARD[0] / sw, CARD[1] / sh)
-    im = im.resize((max(CARD[0], round(sw * scale)), max(CARD[1], round(sh * scale))), Image.LANCZOS)
+
+    w, h = CARD
+    if sh < h or sw < w:
+        scale = min(sw / w, sh / h)
+        w, h = round(w * scale), round(h * scale)
+
+    scale = max(w / sw, h / sh)
+    im = im.resize((max(w, round(sw * scale)), max(h, round(sh * scale))), Image.LANCZOS)
     nw, nh = im.size
-    left, top = (nw - CARD[0]) // 2, (nh - CARD[1]) // 2
-    return im.crop((left, top, left + CARD[0], top + CARD[1]))
+    left, top = (nw - w) // 2, (nh - h) // 2
+    return im.crop((left, top, left + w, top + h))
 
 
 def main() -> None:
@@ -64,7 +76,7 @@ def main() -> None:
             if kb <= MAX_KB:
                 break
 
-        print(f"  ok   {out.relative_to(ROOT)}  {CARD[0]}x{CARD[1]}  q{quality}  {kb}KB")
+        print(f"  ok   {out.relative_to(ROOT)}  {im.size[0]}x{im.size[1]}  q{quality}  {kb}KB")
 
 
 if __name__ == "__main__":

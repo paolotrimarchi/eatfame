@@ -31,8 +31,9 @@
    Total sample was 115 events pre-launch, so everything below the top
    three sits inside noise. Re-sort once real traffic lands.
 
-   Thai Deum sits at 5 by request, not by data -- it's new, so it has no
-   view history at all. Everything from Wan Shun down shifted one place.
+   Thai Deum sits at 5 and Abyssinia at 6 by request, not by data -- both are
+   new, so neither has any view history. Everything from Wan Shun down shifted
+   two places to make room.
    --------------------------------------------------------------- */
 window.RESTAURANTS = [
   {
@@ -138,6 +139,31 @@ window.RESTAURANTS = [
       { id: 'green-curry-chicken', name: 'Chicken Green Curry',    desc: 'Coconut milk, long beans, basil, spicy, with rice',  price: [18.95, 16.50, 14.25] },
       { id: 'beef-oyster-sauce',   name: 'Beef in Oyster Sauce',   desc: 'Peppers, spring onion, mushroom, with rice',         price: [19.95, 17.50, 15.00] },
       { id: 'spicy-beef-salad',    name: 'Spicy Beef Salad',       desc: 'Sliced beef, red onion, coriander, chilli',          price: [20.50, 18.00, 15.50] },
+    ],
+  },
+  {
+    slug: 'abyssinia',
+    name: 'Abyssinia',
+    blurb: 'Ethiopian and Eritrean, 30 years in Oud West',
+    rating: 4.4,
+    reviews: '2,000+',
+    tags: ['Ethiopian', 'Eritrean', 'Vegan'],
+    // Prices are Abyssinia's own menu prices at the 2-dish tier. Unlike most
+    // restaurants here there's no side to add: every dish arrives on teff
+    // injera with lentil stew and salad, so the menu price is the whole plate.
+    //
+    // Teff injera is naturally gluten-free and half the menu is vegan, which
+    // is worth surfacing -- nothing else on the site covers either.
+    //
+    // Photo-backed only. Their two Sambusa starters (€7.00) are left off until
+    // there's a photo of them.
+    dishes: [
+      { id: 'zegni',      name: 'Zegni',      desc: 'Slow-cooked beef in berbere, with teff injera',     price: [18.00, 15.75, 13.50] },
+      { id: 'tebsi',      name: 'Tebsi',      desc: 'Sautéed beef, peppers, onion, with teff injera',    price: [19.00, 16.75, 14.25] },
+      { id: 'doro-tebsi', name: 'Doro Tebsi', desc: 'Sautéed chicken, peppers, onion, with teff injera', price: [16.50, 14.50, 12.50] },
+      { id: 'hamli',      name: 'Hamli',      desc: 'Collard greens, garlic and spices, vegan',          price: [15.50, 13.50, 11.75] },
+      { id: 'temtemo',    name: 'Temtemo',    desc: 'Spiced red lentil stew, vegan',                     price: [15.50, 13.50, 11.75] },
+      { id: 'duba',       name: 'Duba',       desc: 'Pumpkin stew with herbs and spices, vegan',         price: [15.50, 13.50, 11.75] },
     ],
   },
   {

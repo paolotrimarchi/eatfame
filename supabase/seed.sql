@@ -7,18 +7,19 @@ insert into restaurants (slug, name, blurb, rating, reviews, tags, image_path, s
   ('pasta-pasta',          'Pasta Pasta',              'Fresh Italian pasta, made daily',            4.3, '7,000+', array['Italian','Pasta'],               'img/restaurants/pasta-pasta.jpg', 2),
   ('otaru-sushi',          'Otaru Sushi Restaurant',   'Japanese sushi, cut fresh to order',          4.7, '5,000+', array['Sushi','Japanese','Asian'],      'img/restaurants/otaru-sushi.jpg', 4),
   ('the-bab',              'The Bab',                  'Korean comfort food',                         4.7, '2,000+', array['Korean','Asian','BBQ'],          'img/restaurants/the-bab.jpg', 1),
-  ('swagat',               'Swagat Restaurant',        'North Indian comfort food',                   4.6, '2,000+', array['Indian','Comfort food'],         'img/restaurants/swagat.jpg', 10),
-  ('dolce-verona',         'Dolce Verona',             'Italian trattoria, pasta and pizza',           4.7, '4,000+', array['Italian','Pizza','Pasta'],       'img/restaurants/dolce-verona.jpg', 9),
-  ('warung-mini',          'Warung Mini',              'Indonesian warung, rice plates',               4.6, '3,000+', array['Indonesian','Sandwich'],         'img/restaurants/warung-mini.jpg', 12),
-  ('salsa-shop',           'Salsa Shop',               'Mexican tacos and bowls',                      4.3, '2,000+', array['Mexican','Tex Mex','Halal'],     'img/restaurants/salsa-shop.jpg', 11),
+  ('swagat',               'Swagat Restaurant',        'North Indian comfort food',                   4.6, '2,000+', array['Indian','Comfort food'],         'img/restaurants/swagat.jpg', 11),
+  ('dolce-verona',         'Dolce Verona',             'Italian trattoria, pasta and pizza',           4.7, '4,000+', array['Italian','Pizza','Pasta'],       'img/restaurants/dolce-verona.jpg', 10),
+  ('warung-mini',          'Warung Mini',              'Indonesian warung, rice plates',               4.6, '3,000+', array['Indonesian','Sandwich'],         'img/restaurants/warung-mini.jpg', 13),
+  ('salsa-shop',           'Salsa Shop',               'Mexican tacos and bowls',                      4.3, '2,000+', array['Mexican','Tex Mex','Halal'],     'img/restaurants/salsa-shop.jpg', 12),
   ('pind-punjabi',         'Pind Punjabi',             'North Indian, Punjabi kitchen',                4.6, '900+',   array['Indian','Chicken'],              'img/restaurants/pind-punjabi.jpg', 3),
   ('thai-deum',            'Thai Deum',                'Thai specialities, Ceintuurbaan',              4.4, '200+',   array['Thai','Curry','Asian'],          'img/restaurants/thai-deum.jpg', 5),
-  ('wan-shun',             'Wan Shun Restaurant',      'Chinese kitchen, rice bowls and stir-fry',     4.7, '1,500+', array['Chinese','Rice bowls'],          'img/restaurants/wan-shun.jpg', 6),
-  ('mizu-bar',             'Mizu Bar',                 'Asian fusion, sushi and rice boxes',           4.8, '1,000+', array['Japanese','Asian fusion','Sushi'],'img/restaurants/mizu-bar.jpg', 8),
-  ('american-spareribs',   'American Spareribs',       'Slow-cooked ribs and wings',                   4.4, '1,000+', array['American','Wings'],              'img/restaurants/american-spareribs.jpg', 13),
-  ('gyros-republic',       'Gyros Republic',           'Greek street food',                            4.4, '270+',   array['Greek','Mediterranean'],         'img/restaurants/gyros-republic.jpg', 7),
-  ('gnoccheria',           'Gnoccheria',               'Fresh gnocchi, made daily',                    4.7, '330+',   array['Italian','Pasta','Vegetarian'],  'img/restaurants/gnoccheria.jpg', 14),
-  ('momo-tibet',           'Momo Tibet',               'Tibetan kitchen, momo folded by hand',         4.1, '150+',   array['Tibetan','Noodles'],      'img/restaurants/momo-tibet.jpg', 15)
+  ('abyssinia',            'Abyssinia',                'Ethiopian and Eritrean, 30 years in Oud West', 4.4, '2,000+', array['Ethiopian','Eritrean','Vegan'],  'img/restaurants/abyssinia.jpg', 6),
+  ('wan-shun',             'Wan Shun Restaurant',      'Chinese kitchen, rice bowls and stir-fry',     4.7, '1,500+', array['Chinese','Rice bowls'],          'img/restaurants/wan-shun.jpg', 7),
+  ('mizu-bar',             'Mizu Bar',                 'Asian fusion, sushi and rice boxes',           4.8, '1,000+', array['Japanese','Asian fusion','Sushi'],'img/restaurants/mizu-bar.jpg', 9),
+  ('american-spareribs',   'American Spareribs',       'Slow-cooked ribs and wings',                   4.4, '1,000+', array['American','Wings'],              'img/restaurants/american-spareribs.jpg', 14),
+  ('gyros-republic',       'Gyros Republic',           'Greek street food',                            4.4, '270+',   array['Greek','Mediterranean'],         'img/restaurants/gyros-republic.jpg', 8),
+  ('gnoccheria',           'Gnoccheria',               'Fresh gnocchi, made daily',                    4.7, '330+',   array['Italian','Pasta','Vegetarian'],  'img/restaurants/gnoccheria.jpg', 15),
+  ('momo-tibet',           'Momo Tibet',               'Tibetan kitchen, momo folded by hand',         4.1, '150+',   array['Tibetan','Noodles'],      'img/restaurants/momo-tibet.jpg', 16)
 on conflict (slug) do nothing;
 
 -- dishes: (restaurant slug, dish slug, name, description, price@2, price@3, price@4, image path)
@@ -113,6 +114,15 @@ with d (rslug, dslug, name, description, p2, p3, p4) as (
     ('thai-deum','green-curry-chicken','Chicken Green Curry','Coconut milk, long beans, basil, spicy, with rice',18.95,16.50,14.25),
     ('thai-deum','beef-oyster-sauce','Beef in Oyster Sauce','Peppers, spring onion, mushroom, with rice',19.95,17.50,15.00),
     ('thai-deum','spicy-beef-salad','Spicy Beef Salad','Sliced beef, red onion, coriander, chilli',20.50,18.00,15.50),
+
+    -- Abyssinia: every dish arrives on teff injera with lentil stew and salad,
+    -- so the menu price is the whole plate -- no sides to add.
+    ('abyssinia','zegni','Zegni','Slow-cooked beef in berbere, with teff injera',18.00,15.75,13.50),
+    ('abyssinia','tebsi','Tebsi','Sautéed beef, peppers, onion, with teff injera',19.00,16.75,14.25),
+    ('abyssinia','doro-tebsi','Doro Tebsi','Sautéed chicken, peppers, onion, with teff injera',16.50,14.50,12.50),
+    ('abyssinia','hamli','Hamli','Collard greens, garlic and spices, vegan',15.50,13.50,11.75),
+    ('abyssinia','temtemo','Temtemo','Spiced red lentil stew, vegan',15.50,13.50,11.75),
+    ('abyssinia','duba','Duba','Pumpkin stew with herbs and spices, vegan',15.50,13.50,11.75),
 
     ('wan-shun','kung-pao-chicken','Kung Pao Chicken','Leek, peanuts, sweet-sour, lightly spicy',23.00,20.25,17.25),
     ('wan-shun','yuxiang-shredded-pork','Yuxiang Shredded Pork','Coriander, carrot, black fungus, sweet-sour',23.00,20.25,17.25),

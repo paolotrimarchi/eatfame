@@ -1,0 +1,1038 @@
+/* ---------------------------------------------------------------------------
+   DIRECTIONS ON THE NEW BRAND LANGUAGE        ?v=d  e  f  g  h  i
+
+   Read off the two posters. What changed from the live site:
+
+     ground     pale yellow  ->  warm ivory. The yellow survives, but as an
+                accent (the "15% OFF" chip), not as the page.
+     headline   sans  ->  Cormorant Garamond roman. This reverses the rule in
+                the current stylesheet, which reserves the serif for brand and
+                sets the headline in sans "so it reads fast under an ad click".
+                Both cannot be true; the posters have decided.
+     motif      corner brackets / ticket notch, drawn as thin green rules.
+     labels     letterspaced uppercase sans for micro-labels, as in
+                "SCAN TO SEE THE MENU".
+     anchor     a solid green band carrying reversed-out content.
+
+   Typeface note: only three Cormorant files ship (italic 400, italic 600,
+   normal 600), so every roman headline here is 600. Poster 1 is visibly
+   lighter than that. A cg-normal-400.woff2 would match it exactly and is the
+   one asset missing from the set.
+
+   Each direction is free to pick its own layout — that was the brief — so the
+   list shape and masthead vary. See LIST_SHAPE and HOME_HEAD in app.js.
+--------------------------------------------------------------------------- */
+
+/* ---------- shared tokens ---------- */
+/* Overriding the root custom properties re-skins every existing screen at
+   once, which is why menu, cart, fake door and survey need almost no
+   direction-specific rules below. */
+
+[data-v="d"], [data-v="e"], [data-v="f"], [data-v="g"] {
+  --yellow:    #faf8ec;   /* the page */
+  --surface:   #fffefa;   /* cards */
+  --green:     #13402b;   /* ink, and the green band */
+  --green-700: #0d3021;
+  --green-500: #35614a;
+  --line:      #d7d0b6;
+  --line-card: #e4ddc5;
+  --muted:     #5c6b55;
+  --on-green:  #f7f4e2;
+  --on-green-2:#c3d2bd;
+  --tint:      rgba(19, 64, 43, .06);
+  --accent:    #fbf7cf;   /* the poster's offer chip */
+  --rule:      rgba(19, 64, 43, .55);
+}
+
+/* H inverts the same palette rather than inventing a second one. Because the
+   whole stylesheet is written against these two variables, swapping ground and
+   ink flips every screen including the ones with no rules of their own. */
+[data-v="h"] {
+  --yellow:    #12392a;
+  --surface:   #17442f;
+  --green:     #f5f2e2;
+  --green-700: #e6e1c9;
+  --green-500: #c2d0ba;
+  --line:      rgba(245, 242, 226, .20);
+  --line-card: rgba(245, 242, 226, .14);
+  --muted:     #b2c1aa;
+  --on-green:  #12392a;
+  --on-green-2:#2c5340;
+  --tint:      rgba(245, 242, 226, .09);
+  --accent:    #fbf7cf;
+  --rule:      rgba(245, 242, 226, .5);
+}
+/* data-v sits on <html>, so the page surround is set on the element itself. */
+html[data-v="h"], html[data-v="h"] body { background: #0d2c20; }
+html[data-v="h"] .ph { background: linear-gradient(135deg, #1d4d36, #17422f); }
+
+/* The mast directions label the strip themselves, so the "w/c" chip inside it
+   would be a second label for the same row. */
+[data-v="d"] .dp-label, [data-v="f"] .dp-label,
+[data-v="g"] .dp-label, [data-v="h"] .dp-label { display: none; }
+
+/* ---------- shared: headlines go roman ---------- */
+/* The live sheet sets every h1 in italic. On the posters italic is reserved
+   for the wordmark, and headlines are roman. */
+
+[data-v="d"] h1, [data-v="e"] h1, [data-v="f"] h1,
+[data-v="g"] h1, [data-v="h"] h1,
+[data-v="d"] .rhead-body h1, [data-v="e"] .rhead-body h1,
+[data-v="f"] .rhead-body h1, [data-v="g"] .rhead-body h1,
+[data-v="i"] h1, [data-v="i"] .rhead-body h1,
+[data-v="h"] .rhead-body h1 {
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: -.005em;
+}
+
+/* ---------- shared: corner bracket motif ---------- */
+/* Poster 1's device. Two pseudo-elements give the two top corners; the bottom
+   pair hangs off the container's own class where a direction wants all four. */
+
+[data-v] .bracket { position: relative; }
+[data-v] .bracket::before,
+[data-v] .bracket::after {
+  content: '';
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border: 1.5px solid var(--rule);
+  pointer-events: none;
+}
+[data-v] .bracket::before {
+  top: 0; left: 0;
+  border-right: 0; border-bottom: 0;
+  border-top-left-radius: 13px;
+}
+[data-v] .bracket::after {
+  top: 0; right: 0;
+  border-left: 0; border-bottom: 0;
+  border-top-right-radius: 13px;
+}
+
+/* ---------- shared: letterspaced micro-label ---------- */
+
+[data-v] .strip-label {
+  font-family: var(--sans);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ---------- shared: centred serif masthead (D, F, G, H) ---------- */
+
+[data-v] .mast { text-align: center; }
+[data-v] .mast-mark {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -.01em;
+  color: var(--green);
+}
+[data-v] .mast-rule {
+  height: 1px;
+  background: var(--rule);
+  opacity: .5;
+  margin: 12px auto;
+}
+[data-v] .mast-lead {
+  margin: 0 auto;
+  font-family: var(--display);
+  font-weight: 600;
+  line-height: 1.16;
+  letter-spacing: -.008em;
+  color: var(--green);
+}
+
+/* ---------- shared: poster fold (E) ---------- */
+
+[data-v] .poster {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+[data-v] .poster-line {
+  font-family: var(--display);
+  font-weight: 600;
+  font-style: normal;
+  line-height: 1.02;
+  letter-spacing: -.015em;
+  color: var(--green);
+  margin: 0;
+  max-width: 11ch;   /* forces the poster's five short lines */
+}
+[data-v] .poster-foot {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+[data-v] .poster-mark {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 600;
+  color: var(--green);
+}
+[data-v] .poster-url {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ---------- shared: typeset list row (D) ---------- */
+/* A printed menu line: name, leader dots, price. Photography drops to a 46px
+   thumbnail, which is the argument of the direction rather than an oversight. */
+
+[data-v] .rrow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  text-align: left;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--line-card);
+}
+[data-v] .rrow:last-child { border-bottom: 0; }
+[data-v] .rrow .ph {
+  flex: 0 0 auto;
+  width: 46px;
+  height: 46px;
+  border-radius: 10px;
+}
+[data-v] .rrow-body { flex: 1 1 auto; min-width: 0; }
+[data-v] .rrow-top {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+}
+[data-v] .rrow-top h4 {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 21px;
+  line-height: 1.1;
+  letter-spacing: -.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+[data-v] .rrow-dots {
+  flex: 1 1 auto;
+  min-width: 14px;
+  border-bottom: 1px dotted var(--rule);
+  opacity: .45;
+  transform: translateY(-3px);
+}
+[data-v] .rrow-price {
+  flex: 0 0 auto;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 19px;
+  color: var(--green);
+}
+[data-v] .rrow-sub {
+  margin-top: 1px;
+  font-size: 11.5px;
+  font-weight: 550;
+  letter-spacing: .02em;
+  color: var(--muted);
+}
+[data-v] .rrow-sub .sep { opacity: .45; }
+[data-v] .rrow:active { background: var(--tint); }
+
+/* ---------- shared: "how it works" as the green band ---------- */
+/* Poster 2's numbered strip, reversed out of the green. On the live site this
+   section sits below two screens of restaurants and is effectively unread;
+   as a band it at least reads as a designed end to the page. */
+
+[data-v="d"] .how, [data-v="e"] .how, [data-v="f"] .how,
+[data-v="g"] .how, [data-v="i"] .how,
+[data-v="h"] .how {
+  background: var(--green);
+  color: var(--on-green);
+  margin-top: 34px;
+  padding: 28px 20px 30px;
+}
+[data-v="d"] .how .eyebrow, [data-v="e"] .how .eyebrow,
+[data-v="f"] .how .eyebrow, [data-v="g"] .how .eyebrow,
+[data-v="h"] .how .eyebrow ,
+[data-v="i"] .how .eyebrow {
+  color: var(--on-green-2);
+  letter-spacing: .18em;
+  font-size: 9.5px;
+}
+[data-v="d"] .how ol, [data-v="e"] .how ol, [data-v="f"] .how ol,
+[data-v="g"] .how ol, [data-v="h"] .how ol ,
+[data-v="i"] .how ol {
+  counter-reset: step;
+  list-style: none;
+  padding: 0;
+  margin: 18px 0 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px 16px;
+}
+[data-v="d"] .how li, [data-v="e"] .how li, [data-v="f"] .how li,
+[data-v="g"] .how li, [data-v="h"] .how li ,
+[data-v="i"] .how li {
+  counter-increment: step;
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.35;
+  color: var(--on-green-2);
+}
+/* Serif numerals, as the poster sets them. */
+[data-v="d"] .how li::before, [data-v="e"] .how li::before,
+[data-v="f"] .how li::before, [data-v="g"] .how li::before,
+[data-v="i"] .how li::before,
+[data-v="h"] .how li::before {
+  content: counter(step);
+  display: block;
+  font-family: var(--display);
+  font-style: normal;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 1;
+  color: var(--on-green);
+  margin-bottom: 6px;
+}
+
+/* ---------- shared: footer, menu, cart, door, survey ---------- */
+/* Mostly inherited through the tokens. These are the places where the live
+   sheet hard-codes something the new language contradicts. */
+
+[data-v="d"] footer, [data-v="e"] footer, [data-v="f"] footer,
+[data-v="g"] footer, [data-v="i"] footer,
+[data-v="h"] footer {
+  /* Was green at 45% opacity, which measured 2.57:1 and failed contrast. */
+  color: var(--muted);
+  font-size: 17px;
+}
+[data-v="d"] .door .mark, [data-v="e"] .door .mark, [data-v="f"] .door .mark,
+[data-v="g"] .door .mark, [data-v="h"] .door .mark,
+[data-v="d"] .thanks .mark, [data-v="e"] .thanks .mark,
+[data-v="f"] .thanks .mark, [data-v="g"] .thanks .mark,
+[data-v="h"] .thanks .mark ,
+[data-v="i"] .thanks .mark {
+  color: var(--muted);   /* was .38 alpha, 2.17:1 */
+}
+[data-v="d"] input[type="email"]::placeholder,
+[data-v="e"] input[type="email"]::placeholder,
+[data-v="f"] input[type="email"]::placeholder,
+[data-v="g"] input[type="email"]::placeholder,
+[data-v="h"] input[type="email"]::placeholder ,
+[data-v="i"] input[type="email"]::placeholder {
+  color: var(--muted);   /* was .65 alpha, 2.82:1 */
+}
+
+/* The menu's restaurant header and the fake door both want the new serif
+   treatment rather than the live italic. */
+[data-v="d"] .rhead .ph, [data-v="e"] .rhead .ph, [data-v="f"] .rhead .ph,
+[data-v="g"] .rhead .ph, [data-v="i"] .rhead .ph,
+[data-v="h"] .rhead .ph {
+  aspect-ratio: 16 / 9;
+}
+[data-v="d"] .tierbar, [data-v="e"] .tierbar, [data-v="f"] .tierbar,
+[data-v="g"] .tierbar, [data-v="h"] .tierbar ,
+[data-v="i"] .tierbar {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  font-weight: 600;
+  letter-spacing: .01em;
+}
+[data-v="d"] .sub-h, [data-v="e"] .sub-h, [data-v="f"] .sub-h,
+[data-v="g"] .sub-h, [data-v="h"] .sub-h ,
+[data-v="i"] .sub-h {
+  letter-spacing: .18em;
+  font-size: 9.5px;
+}
+/* Dish names go serif on the menu screen too, otherwise the language stops at
+   the fold and the deepest screen in the funnel looks like the old site. */
+[data-v="d"] .dish h4, [data-v="e"] .dish h4, [data-v="f"] .dish h4,
+[data-v="g"] .dish h4, [data-v="h"] .dish h4,
+[data-v="d"] .citem h4, [data-v="e"] .citem h4, [data-v="f"] .citem h4,
+[data-v="g"] .citem h4, [data-v="h"] .citem h4,
+[data-v="i"] .dish h4, [data-v="i"] .citem h4 {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 1.15;
+  letter-spacing: -.005em;
+}
+[data-v="d"] .dish .price, [data-v="e"] .dish .price, [data-v="f"] .dish .price,
+[data-v="g"] .dish .price, [data-v="h"] .dish .price,
+[data-v="d"] .citem .cprice, [data-v="e"] .citem .cprice,
+[data-v="f"] .citem .cprice, [data-v="g"] .citem .cprice,
+[data-v="h"] .citem .cprice,
+[data-v="d"] .totals .row.big .amt, [data-v="e"] .totals .row.big .amt,
+[data-v="f"] .totals .row.big .amt, [data-v="g"] .totals .row.big .amt,
+[data-v="h"] .totals .row.big .amt ,
+[data-v="i"] .totals .row.big .amt {
+  font-family: var(--display);
+  font-weight: 600;
+}
+/* The fake door is the one screen the posters most resemble, so it gets the
+   full poster treatment: brackets, big roman line, reversed micro-label. */
+[data-v="d"] .door h1, [data-v="e"] .door h1, [data-v="f"] .door h1,
+[data-v="g"] .door h1, [data-v="h"] .door h1,
+[data-v="d"] .survey h1, [data-v="e"] .survey h1, [data-v="f"] .survey h1,
+[data-v="g"] .survey h1, [data-v="i"] .door h1, [data-v="i"] .survey h1,
+[data-v="h"] .survey h1 {
+  font-size: 40px;
+  line-height: 1.03;
+  letter-spacing: -.018em;
+}
+/* Survey options and the door input pick up the ivory card surface already. */
+[data-v="d"] .opt, [data-v="e"] .opt, [data-v="f"] .opt,
+[data-v="g"] .opt, [data-v="i"] .opt,
+[data-v="h"] .opt { border-radius: 14px; }
+
+/* The offer chip colour from poster 2, available to any direction that wants
+   to mark a price break. Currently used by G on the tier bar. */
+[data-v] .tierbar.done { color: var(--green-500); }
+
+/* =========================================================================
+   D — MENU CARD
+   The site as a printed menu. One column, typeset rows, photography reduced
+   to thumbnails. Highest brand expression, lowest food appetite. The honest
+   risk: your strongest asset is the photography and this direction hides it.
+   ========================================================================= */
+
+[data-v="d"] .mast { padding: 30px 22px 0; }
+[data-v="d"] .mast-mark { font-size: 40px; }
+[data-v="d"] .mast-rule { width: 54px; }
+[data-v="d"] .mast-lead { font-size: 21px; max-width: 19ch; }
+[data-v="d"] .strip-label { display: block; padding: 24px 22px 8px; }
+[data-v="d"] .dpwrap { padding: 0 22px; }
+[data-v="d"] .dp { font-size: 12px; border-radius: 8px; }
+[data-v="d"] .rlist {
+  display: block;          /* overrides the two-up grid from variants.css */
+  padding: 22px 22px 0;
+}
+[data-v="d"] .how { margin-top: 30px; }
+
+/* =========================================================================
+   E — POSTER
+   The fold is poster 1 and nothing else. Spends the entire first screen on
+   the claim, then one-up photo cards below. This is the direct opposite of
+   the PostHog finding and is built so the trade is visible rather than
+   argued: 82-95% of cold visitors never scrolled past 5%.
+   ========================================================================= */
+
+[data-v="e"] .poster {
+  min-height: 76dvh;
+  padding: 52px 26px 26px;
+}
+[data-v="e"] .poster-line { font-size: 46px; }
+[data-v="e"] .poster-mark { font-size: 27px; }
+/* One-up cards have the width for a full name, so undo the grid truncation. */
+[data-v="e"] .rcard-body h4 { white-space: normal; overflow: visible; }
+[data-v="e"] .hero-copy { padding: 22px 22px 0; }
+[data-v="e"] .lead {
+  font-family: var(--display);
+  font-size: 20px;
+  line-height: 1.2;
+  color: var(--green);
+}
+[data-v="e"] .dpwrap { margin: 16px 0 0; padding: 0 22px; }
+[data-v="e"] .dp { font-size: 12px; }
+[data-v="e"] .rlist {
+  display: block;          /* one-up, as live */
+  padding: 22px 18px 0;
+}
+[data-v="e"] .rcard { margin-bottom: 16px; padding: 8px; }
+[data-v="e"] .rcard .ph { aspect-ratio: 3 / 2; }
+[data-v="e"] .rcard-body h4 { font-size: 26px; }
+
+/* =========================================================================
+   F — TICKET
+   Every card is a ticket: thin rule, notched top corners, dotted divider.
+   Photo-forward but framed, so the brand device is present on every row
+   rather than only at the top of the page.
+   ========================================================================= */
+
+[data-v="f"] .mast { padding: 22px 16px 0; }
+[data-v="f"] .mast-mark { font-size: 32px; }
+[data-v="f"] .mast-rule { width: 44px; margin: 10px auto; }
+[data-v="f"] .mast-lead { font-size: 18px; max-width: 22ch; }
+[data-v="f"] .strip-label { display: block; padding: 18px 14px 7px; }
+[data-v="f"] .dpwrap { padding: 0 14px; }
+[data-v="f"] .dp { font-size: 12px; border-radius: 7px; }
+
+[data-v="f"] .rlist { padding: 16px 14px 0; gap: 14px 12px; }
+[data-v="f"] .rcard {
+  position: relative;
+  padding: 7px;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  background: var(--surface);
+}
+[data-v="f"] .rcard .ph { aspect-ratio: 16 / 9; border-radius: 2px; }
+[data-v="f"] .rcard-body {
+  padding: 9px 3px 3px;
+  border-top: 1px dotted var(--rule);
+  margin-top: 7px;
+}
+[data-v="f"] .rcard-body h4 { font-size: 18px; }
+[data-v="f"] .rcard-line { font-size: 11.5px; }
+[data-v="f"] .rcard-line b { font-size: 12px; }
+/* The notch. Two cream discs sitting on the top corners of each ticket. */
+[data-v="f"] .rcard::before,
+[data-v="f"] .rcard::after {
+  content: '';
+  position: absolute;
+  top: -7px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: var(--yellow);
+  border: 1px solid var(--rule);
+}
+[data-v="f"] .rcard::before { left: -7px; }
+[data-v="f"] .rcard::after  { right: -7px; }
+
+/* =========================================================================
+   G — EDITORIAL GRID
+   The two-up grid from B re-skinned to the new language: serif headings,
+   letterspaced labels, green band, ivory ground. The conversion-safe option,
+   and the one I would put money on.
+   ========================================================================= */
+
+[data-v="g"] .mast { padding: 20px 14px 0; }
+[data-v="g"] .mast-mark { font-size: 30px; }
+[data-v="g"] .mast-rule { width: 40px; margin: 9px auto; }
+[data-v="g"] .mast-lead { font-size: 17.5px; max-width: 23ch; }
+[data-v="g"] .strip-label { display: block; padding: 16px 12px 6px; }
+[data-v="g"] .dpwrap { padding: 0 12px; }
+[data-v="g"] .dp { font-size: 12px; }
+
+[data-v="g"] .rlist { padding: 14px 12px 0; gap: 13px 10px; }
+[data-v="g"] .rcard { padding: 5px; border-radius: 16px; }
+[data-v="g"] .rcard .ph { aspect-ratio: 4 / 3; border-radius: 12px; }
+[data-v="g"] .rcard-body { padding: 8px 3px 3px; }
+[data-v="g"] .rcard-body h4 { font-size: 18px; }
+[data-v="g"] .rcard-line { font-size: 11.5px; }
+[data-v="g"] .rcard-line b { font-size: 12px; }
+/* Cuisine as an uppercase micro-label rather than body text, which is the
+   poster's treatment for supporting information. */
+[data-v="g"] .rcard-line:last-child {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+/* =========================================================================
+   H — GREEN-FIRST
+   The palette inverted. Food photography against deep green rather than
+   against cream, which is how the Uber Eats screen you sent is built and is
+   the reason its cards read as appetising at small sizes.
+   ========================================================================= */
+
+[data-v="h"] .mast { padding: 20px 14px 0; }
+[data-v="h"] .mast-mark { font-size: 30px; }
+[data-v="h"] .mast-rule { width: 40px; margin: 9px auto; }
+[data-v="h"] .mast-lead { font-size: 17.5px; max-width: 23ch; }
+[data-v="h"] .strip-label { display: block; padding: 16px 12px 6px; }
+[data-v="h"] .dpwrap { padding: 0 12px; }
+[data-v="h"] .dp { font-size: 12px; }
+
+[data-v="h"] .rlist { padding: 14px 12px 0; gap: 13px 10px; }
+[data-v="h"] .rcard { padding: 0; border: 0; background: none; border-radius: 14px; }
+[data-v="h"] .rcard .ph { aspect-ratio: 4 / 3; border-radius: 14px; }
+[data-v="h"] .rcard-body { padding: 8px 2px 2px; }
+[data-v="h"] .rcard-body h4 { font-size: 18px; }
+[data-v="h"] .rcard-line { font-size: 11.5px; }
+[data-v="h"] .rcard-line b { font-size: 12px; }
+/* On a dark ground the green band would vanish, so the closing section
+   inverts back to the cream. */
+[data-v="h"] .how { background: var(--green); color: var(--on-green); }
+[data-v="i"] .how li,
+[data-v="h"] .how li { color: #2c5340; }
+[data-v="h"] .how li::before { color: var(--on-green); }
+[data-v="i"] .how .eyebrow,
+[data-v="h"] .how .eyebrow { color: #3d6450; }
+
+/* =========================================================================
+   I — THE CURRENT SITE WITH THE ORDER APP FOLDED IN
+
+   Carried over from eatfame-order: the green header bar does the navigating,
+   a postcode control sits in it, and the delivery week moved out of the page
+   body into that header. No bottom tab bar — basket stays the floating pill.
+
+   New here, each answering something from the UX review: a cuisine filter for
+   the 16-restaurant browse problem, a typical price on cards instead of the
+   floor price that was anchoring the willingness-to-pay answer, and the
+   pricing mechanic stated once in the fold instead of first appearing two
+   screens down inside a menu.
+
+   The notch appears twice. The header band, and the basket docket on the
+   cart. Not on the 16 restaurant cards, not on the floating pill, and not on
+   the mechanic chip — at 34px tall a chip is below the size where a concave
+   corner is legible, which is the same rule that rules out the cards.
+
+   The cream is the page and the cards have no surface of their own, so the
+   photography sits directly on the ground rather than on 16 white rectangles.
+   ========================================================================= */
+
+[data-v="i"] {
+  --yellow:    #faf8ef;   /* the page, and the only ground */
+  --surface:   #faf8ef;   /* cards do not introduce a second surface */
+  --green:     #13402b;
+  --green-700: #0d3021;
+  --green-500: #35614a;
+  --line:      #ddd6bd;
+  --line-card: #e6dfc8;
+  --muted:     #5c6b55;
+  --on-green:  #f7f4e2;
+  --on-green-2:#c3d2bd;
+  --tint:      rgba(19, 64, 43, .06);
+  --accent:    #f6f0c4;
+  --rule:      rgba(19, 64, 43, .55);
+}
+
+/* ---------- header band: the app's navigation ---------- */
+
+[data-v="i"] .appbar {
+  position: relative;
+  background: var(--green);
+  padding: 13px 16px 14px;
+  margin-bottom: 13px;
+}
+/* The notch. Two ground-coloured discs sitting on the bottom corners, so the
+   band reads as torn from a strip. Works because the page behind is one flat
+   colour — this is the condition the device needs. */
+[data-v="i"] .appbar::before,
+[data-v="i"] .appbar::after {
+  content: '';
+  position: absolute;
+  bottom: -14px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--yellow);
+}
+[data-v="i"] .appbar::before { left: -14px; }
+[data-v="i"] .appbar::after  { right: -14px; }
+
+/* Two rows, tight. Row one is the wordmark and the account square; row two is
+   the two controls as compact chips sized to their content. Total band height
+   is ~85px against the 112px the stacked label-over-value version needed. */
+[data-v="i"] .appbar { padding: 8px 14px 10px; }
+[data-v="i"] .appbar-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+[data-v="i"] .appbar-mark {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 1;
+  color: var(--on-green);
+}
+[data-v="i"] .appbar-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 7px;
+}
+[data-v="i"] .appctl {
+  position: relative;
+  flex: 0 1 auto;
+  min-width: 0;
+  min-height: 30px;
+  padding: 0 10px;
+  border-radius: 8px;
+  background: rgba(247, 244, 226, .13);
+  color: var(--on-green);
+  font-size: 12.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+[data-v="i"] .appctl .cv { opacity: .6; margin-left: 1px; }
+[data-v="i"] .appctl:active { background: rgba(247, 244, 226, .22); }
+/* 30px visible, hit area extended to 44 rather than inflating the chip. */
+[data-v="i"] .appctl::after { content: ''; position: absolute; inset: -7px 0; }
+
+[data-v="i"] .appbar-acct {
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--on-green);
+  color: var(--green);
+  display: grid;
+  place-items: center;
+  position: relative;
+}
+[data-v="i"] .appbar-acct svg { width: 19px; height: 19px; }
+[data-v="i"] .appbar-acct:active { background: #e8e4cb; }
+[data-v="i"] .appbar-acct::after { content: ''; position: absolute; inset: -5px; }
+
+/* ---------- postcode panel ---------- */
+
+[data-v="i"] .pcpanel { padding: 0 16px 4px; margin: -4px 0 12px; text-align: left; }
+[data-v="i"] .pcrow { display: flex; gap: 8px; margin-top: 6px; }
+[data-v="i"] .pcpanel input {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 44px;
+  padding: 0 16px;
+  font-size: 16px;            /* below 16 and iOS zooms on focus */
+  font-family: var(--sans);
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  background: #fffefa;
+  color: var(--green);
+}
+[data-v="i"] .pcpanel input:focus { outline: none; border-color: var(--green); }
+[data-v="i"] .pcpanel .btn { min-height: 44px; padding: 0 18px; border-radius: 10px; }
+[data-v="i"] .pcnote { margin: 8px 0 0; font-size: 12.5px; line-height: 1.4; }
+[data-v="i"] .pcnote.ok  { color: var(--green-500); font-weight: 600; }
+[data-v="i"] .pcnote.out { color: #8a5a1e; }
+
+/* ---------- lead, mechanic, filter ---------- */
+
+[data-v="i"] .hero-copy { padding: 0 16px; }
+[data-v="i"] .lead {
+  font-family: var(--display);
+  font-size: 20px;
+  line-height: 1.18;
+  font-weight: 600;
+  letter-spacing: -.008em;
+  color: var(--green);
+}
+/* The one place the old yellow survives, as the poster uses it. Square-ish
+   corners rather than a notch: see the note at the top of this block. */
+[data-v="i"] .mechanic {
+  margin: 11px 16px 0;
+  padding: 9px 14px;
+  background: var(--accent);
+  border-radius: 6px;
+  font-size: 12.5px;
+  line-height: 1.35;
+  color: var(--green);
+}
+[data-v="i"] .mechanic b { font-weight: 700; }
+
+/* ---------- list: photos directly on the cream ---------- */
+
+[data-v="i"] .rlist { padding: 14px 14px 0; gap: 14px 12px; }
+/* One box per restaurant, photo and text inside it. The box is the same cream
+   as the page and is drawn with a rule rather than a fill, so the ground still
+   reads as the field instead of 16 white rectangles sitting on it. */
+[data-v="i"] .rcard {
+  padding: 7px;
+  background: none;
+  border: 1px solid var(--line-card);
+  border-radius: 14px;
+}
+[data-v="i"] .rcard:active { background: var(--tint); }
+[data-v="i"] .rcard .ph { aspect-ratio: 4 / 3; border-radius: 9px; }
+[data-v="i"] .rcard-body { padding: 8px 3px 2px; }
+[data-v="i"] .rcard-body h4 { font-size: 18px; }
+[data-v="i"] .rcard-line { font-size: 11.5px; }
+[data-v="i"] .rcard-line b { font-size: 12.5px; }
+[data-v="i"] .rcard-line:last-child { font-weight: 600; }
+
+/* The docket itself is defined in the revisions block further down. The first
+   version lived here and drew the discs with a border, which is what produced
+   two outlined rings instead of a torn corner — it is deleted rather than
+   overridden, because the later rule does not set `border` and so would have
+   left the stroke in place. */
+
+/* The pill keeps its curve, so it gets the notch's cheaper sibling: a dotted
+   rule reading as a perforation, which works on a radius where a notch cannot. */
+[data-v="i"] #cartbar .cb-t {
+  border-left: 1px dotted rgba(247, 244, 226, .5);
+  padding-left: 12px;
+}
+
+/* Week panel: the same four pills as the cart, revealed under the header. */
+[data-v="i"] .wkpanel { padding: 0 16px; margin: -3px 0 12px; }
+[data-v="i"] .wkpanel .dp-label { display: none; }
+[data-v="i"] .wkpanel .dpwrap { margin: 0; padding: 0; }
+[data-v="i"] .wkpanel .dp { font-size: 12.5px; min-height: 44px; border-radius: 10px; }
+
+/* =========================================================================
+   I — REVISIONS
+
+   Cards go butter yellow, radii settle at 8 across the app, the cart bar
+   floats free of its band, the profile control gets real size, the menu photo
+   runs to the top of the screen with the back control floating on it, and the
+   checkout docket is rebuilt.
+
+   On the docket: the first attempt drew the notch with bordered discs, which
+   produced two outlined rings hanging off a bordered box rather than a torn
+   corner. A concave corner cannot be cut out of a box that has its own
+   border — the border follows the box, not the bite. So the docket loses its
+   border and keeps a fill, and the discs are page-coloured with no stroke.
+   That is the condition the device actually needs, and it is the same reason
+   the header band notch worked first time.
+   ========================================================================= */
+
+[data-v="i"] {
+  /* The original site yellow, kept as the card fill. It sits at exactly the
+     same luminance as the cream page (1.00:1), so the card reads as a warmer
+     patch rather than a lighter one — which means the box is held by its
+     border, not its fill. Hence the border alpha below being .16 rather than
+     the .10 a fill-separated card would need. */
+  --butter:  #fffacc;
+  --r-card:  8px;
+  --r-img:   8px;
+  --r-sm:    8px;
+  --pill:    8px;       /* radii settle at 8 across the app */
+}
+
+/* ---------- butter cards ---------- */
+
+[data-v="i"] .rcard {
+  background: var(--butter);
+  border: 1px solid rgba(19, 64, 43, .16);
+  border-radius: 8px;
+  padding: 6px;
+}
+[data-v="i"] .rcard .ph { border-radius: 6px; }
+[data-v="i"] .rcard:active { background: #f7f0b8; }
+
+[data-v="i"] .dish {
+  background: var(--butter);
+  border: 1px solid rgba(19, 64, 43, .16);
+  border-radius: 8px;
+}
+[data-v="i"] .dish-media .ph { border-radius: 6px; }
+[data-v="i"] .tierbar { border-radius: 8px; background: var(--butter); border-color: rgba(19, 64, 43, .16); }
+[data-v="i"] .chip { border-radius: 8px; background: rgba(19, 64, 43, .07); }
+[data-v="i"] .qty { border-radius: 8px; }
+[data-v="i"] .qty button { border-radius: 6px; }
+[data-v="i"] .add { border-radius: 8px; }
+[data-v="i"] .opt { border-radius: 8px; }
+[data-v="i"] .pcpanel input, [data-v="i"] .pcpanel .btn { border-radius: 8px; }
+[data-v="i"] .wkpanel .dp { border-radius: 8px; }
+[data-v="i"] input[type="email"] { border-radius: 8px; }
+
+/* ---------- profile control, at a size you can actually hit ---------- */
+
+
+/* ---------- floating cart bar ---------- */
+/* The band and its top rule are gone, so the button floats over the content
+   it is scrolling above. The shadow is what sells it, so it stays even though
+   nothing else in the language carries one. */
+
+[data-v="i"] #cartbar {
+  background: none;
+  border-top: 0;
+  backdrop-filter: none;
+  padding: 10px 14px calc(14px + env(safe-area-inset-bottom));
+}
+[data-v="i"] #cartbar .btn {
+  border-radius: 10px;
+  box-shadow: 0 10px 26px -6px rgba(13, 44, 32, .45), 0 2px 6px rgba(13, 44, 32, .2);
+}
+[data-v="i"] #cartbar .hint {
+  background: var(--butter);
+  border-radius: 8px;
+  margin-bottom: 8px;
+  padding: 7px 10px;
+}
+
+/* ---------- menu: photo to the top, back control floating on it ---------- */
+
+[data-v="i"] .rhero { position: relative; }
+[data-v="i"] .rhero .ph { aspect-ratio: 2 / 1; border-radius: 0; }
+/* Same notch as the header band on home. It works here for the same reason:
+   the photo has square corners and the thing directly below it is the flat
+   page cream, which is what the discs have to match. */
+[data-v="i"] .rhero::before,
+[data-v="i"] .rhero::after {
+  content: '';
+  position: absolute;
+  z-index: 2;
+  bottom: -14px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--yellow);
+}
+[data-v="i"] .rhero::before { left: -14px; }
+[data-v="i"] .rhero::after  { right: -14px; }
+/* Scrim only at the top, so the control stays legible on a pale photo without
+   dimming the food. */
+[data-v="i"] .rhero-scrim {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 96px;
+  background: linear-gradient(to bottom, rgba(13, 44, 32, .5), rgba(13, 44, 32, 0));
+  pointer-events: none;
+}
+[data-v="i"] .rhero-back {
+  position: absolute;
+  top: calc(10px + env(safe-area-inset-top));
+  left: 12px;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  font-size: 24px;
+  line-height: 1;
+  color: #fff;
+  background: rgba(13, 44, 32, .42);
+  backdrop-filter: blur(8px);
+}
+[data-v="i"] .rhero-back:active { background: rgba(13, 44, 32, .62); }
+[data-v="i"] .rhead { padding: 14px 16px 0; }
+[data-v="i"] .rhead-body { padding: 0 0 6px; }
+
+/* ---------- checkout: the docket, rebuilt ---------- */
+
+[data-v="i"] .clist {
+  position: relative;
+  background: var(--butter);
+  border: 0;
+  border-radius: 8px 8px 0 0;
+  padding: 2px 16px 6px;
+  margin-bottom: 0;
+}
+[data-v="i"] .citem { border-bottom: 1px dotted rgba(19, 64, 43, .3); }
+[data-v="i"] .citem:last-child { border-bottom: 0; }
+[data-v="i"] .citem .ph { border-radius: 8px; }
+/* No notch here. The discs have to match whatever sits behind them, and at
+   this seam that is the butter totals block, not the page cream — so they
+   rendered as two cream blobs on butter however they were coloured. The
+   dashed rule below does the receipt job without the geometry problem, and
+   the notch moves to the restaurant hero, where the background behind it
+   really is the page. */
+/* The totals continue the same docket below the tear. */
+[data-v="i"] .totals {
+  background: var(--butter);
+  border-radius: 0 0 8px 8px;
+  border-top: 1px dashed rgba(19, 64, 43, .3);
+  margin-top: 0;
+  padding: 14px 16px 16px;
+}
+[data-v="i"] .totals .row.big { border-top-color: rgba(19, 64, 43, .18); }
+
+/* ---------- delivery: one line, dates with a window ---------- */
+
+[data-v="i"] .dayline {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+[data-v="i"] .dayopt {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-height: 56px;
+  justify-content: center;
+  padding: 10px 12px;
+  text-align: left;
+  border: 1.5px solid var(--line);
+  border-radius: 8px;
+  background: var(--yellow);
+}
+[data-v="i"] .dayopt-d { font-size: 14.5px; font-weight: 650; color: var(--green); }
+[data-v="i"] .dayopt-t { font-size: 12px; color: var(--muted); font-weight: 550; }
+[data-v="i"] .dayopt.sel { border-color: var(--green); background: var(--green); }
+[data-v="i"] .dayopt.sel .dayopt-d { color: var(--on-green); }
+[data-v="i"] .dayopt.sel .dayopt-t { color: var(--on-green-2); }
+
+/* Floating back control on the cart, matching the restaurant page. No bar. */
+[data-v="i"] .floatback {
+  width: 38px;
+  height: 38px;
+  margin: 12px 0 2px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  font-size: 23px;
+  line-height: 1;
+  color: var(--on-green);
+  background: var(--green);
+}
+[data-v="i"] .floatback:active { background: var(--green-700); }
+
+/* The tier nudge, now riding in the floating summary. */
+[data-v="i"] #cartbar .hint {
+  background: var(--butter);
+  border: 1px solid rgba(19, 64, 43, .16);
+  border-radius: 8px;
+  margin-bottom: 8px;
+  padding: 8px 12px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--green);
+}
+[data-v="i"] #cartbar .hint.done {
+  background: none;
+  border-color: transparent;
+  color: var(--green-500);
+  font-size: 12px;
+  padding: 2px 0 6px;
+}
+
+/* ---------- I: nudge inside the button, and the cart head ---------- */
+
+/* Stacked summary button: the main row, then the nudge reversed out below it. */
+[data-v="i"] #cartbar .btn.cbstack {
+  display: block;
+  padding: 11px 12px 10px 16px;
+  min-height: 0;
+}
+[data-v="i"] #cartbar .cb-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+[data-v="i"] #cartbar .cb-sub {
+  display: block;
+  margin-top: 7px;
+  padding-top: 7px;
+  border-top: 1px dashed rgba(247, 244, 226, .3);
+  font-size: 12px;
+  font-weight: 550;
+  letter-spacing: .01em;
+  color: var(--on-green-2);
+  text-align: left;
+}
+[data-v="i"] #cartbar .btn[disabled] .cb-sub { color: rgba(255, 250, 204, .75); }
+
+/* Back control and title share a row. */
+[data-v="i"] .cart-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-top: 12px;
+}
+[data-v="i"] .cart-head .page-h { margin: 0; }
+[data-v="i"] .floatback { margin: 0; flex: 0 0 auto; }
+
+/* Closing reassurance, in place of a screen of empty cream. */
+[data-v="i"] .cart-note {
+  margin-top: 22px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+[data-v="i"] .cart-note p {
+  margin: 0 0 7px;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+[data-v="i"] .cart-note p:last-child { margin-bottom: 0; }
+[data-v="i"] .cart-note b { color: var(--green); font-weight: 700; }

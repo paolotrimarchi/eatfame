@@ -1,0 +1,241 @@
+/* ---------------------------------------------------------------------------
+   Fold variants for the localhost comparison.
+
+   Every rule here is scoped under html[data-v="a|b|c"]. With no ?v= param the
+   attribute is absent and this file is completely inert, so the default page
+   renders exactly as it does live. Delete this file and the data-v line in
+   index.html to remove the experiment entirely.
+
+   What all three change, per the PostHog read:
+     - the 52px wordmark block becomes a slim header bar
+     - the "Eat like you went out. All week." headline is gone; the concrete
+       subtitle takes its place as the lead line
+     - the delivery-date pill folds into the header bar, killing a whole row
+     - card images go 16:10 -> 16:9
+     - type scales down
+
+   A -> C is a density ladder. Same structure, progressively tighter, so the
+   question "how far is too far" is answerable by looking at three screens.
+--------------------------------------------------------------------------- */
+
+/* ---------- shared across all variants ---------- */
+
+[data-v] .slimbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--green);
+  color: var(--on-green);
+  padding: 0 16px;
+}
+[data-v] .slim-mark {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -.01em;
+}
+[data-v] .slim-date {
+  font-family: var(--sans);
+  font-weight: 600;
+  letter-spacing: .01em;
+  opacity: .82;
+  white-space: nowrap;
+}
+
+/* The lead line is now the first thing you read, so it stops being muted
+   secondary copy and becomes the actual promise. */
+[data-v] .lead {
+  margin: 0;
+  color: var(--green);
+  font-weight: 500;
+  letter-spacing: -.01em;
+}
+
+/* ---------- delivery week strip ---------- */
+/* The tool in the first fifth of the screen. Four weeks, no scrolling, because
+   every option being visible at once is what makes it read as a choice rather
+   than as a row of dates. The "w/c" label is shared instead of repeated in
+   each pill, so the row carries one label and four short dates. */
+
+[data-v] .dpwrap {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+[data-v] .dp-label {
+  flex: 0 0 auto;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+[data-v] .datepick {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+[data-v] .dp {
+  border: 1.5px solid var(--line);
+  background: var(--surface);
+  border-radius: var(--pill);
+  padding: 6px 4px;
+  text-align: center;
+  white-space: nowrap;
+  line-height: 1.2;
+  font-weight: 650;
+  letter-spacing: -.01em;
+}
+[data-v] .dp.sel { border-color: var(--green); background: var(--green); color: var(--on-green); }
+
+/* ---------- two-up grid ---------- */
+/* Two cards per row is the single biggest lever on restaurants-per-screen, and
+   it matters most on a phone, where the old one-up card ate a full 300px row
+   each. Grid rows stretch to equal height on their own, so cards in a row stay
+   level even when one name wraps to two lines. */
+
+[data-v] .rlist { display: grid; grid-template-columns: 1fr 1fr; }
+
+[data-v] .rcard-body h4 {
+  /* One line. A wrapped name in a 175px card pushes every price line out of
+     alignment across the row, which is worse than a truncated name. */
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+[data-v] .rcard-line {
+  color: var(--muted);
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+[data-v] .rcard-line b { font-weight: 700; color: var(--green); }
+[data-v] .rcard-line .sep { opacity: .45; }
+/* rate() ships its own .meta span; inside a grid card the row is the meta. */
+[data-v] .rcard-line .rate { font-size: inherit; color: inherit; }
+
+/* ---------- A: tight ---------- */
+/* Your five points, applied conservatively. Nothing here would look out of
+   place next to the current design. */
+
+[data-v="a"] .slimbar { height: 52px; }
+[data-v="a"] .slim-mark { font-size: 27px; }
+[data-v="a"] .slim-date { font-size: 12.5px; }
+
+[data-v="a"] .hero-copy { padding: 16px 16px 2px; }
+[data-v="a"] .lead { font-size: 18px; line-height: 1.3; }
+
+[data-v="a"] .dpwrap { margin: 12px 0 0; padding: 0 14px; }
+[data-v="a"] .dp { font-size: 12.5px; }
+
+/* Card ~175px wide at a 390px viewport, image ~92px tall at 16:9. */
+[data-v="a"] .rlist { padding: 16px 14px 0; gap: 14px 12px; }
+[data-v="a"] .rcard { padding: 6px; border-radius: 20px; }
+[data-v="a"] .rcard .ph { aspect-ratio: 16 / 9; border-radius: 14px; }
+[data-v="a"] .rcard-body { padding: 9px 4px 4px; }
+[data-v="a"] .rcard-body h4 { font-size: 19px; }
+[data-v="a"] .rcard-line { font-size: 12.5px; }
+[data-v="a"] .rcard-line b { font-size: 13px; }
+
+/* ---------- B: tighter ---------- */
+/* A, plus a sticky header and a real step down in type. The header staying put
+   means the brand is never off screen, which is what buys permission to make it
+   small in the first place. */
+
+[data-v="b"] .slimbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  height: 44px;
+}
+[data-v="b"] .slim-mark { font-size: 22px; }
+[data-v="b"] .slim-date { font-size: 11.5px; }
+
+[data-v="b"] .hero-copy { padding: 13px 16px 0; }
+[data-v="b"] .lead { font-size: 16.5px; line-height: 1.28; }
+
+[data-v="b"] .dpwrap { margin: 10px 0 0; padding: 0 12px; }
+[data-v="b"] .dp { font-size: 12px; }
+
+/* Card ~178px wide, image ~95px at 16:9. Tightest gaps and type, so this is
+   the most-restaurants-per-screen setting. */
+[data-v="b"] .rlist { padding: 13px 12px 0; gap: 11px 10px; }
+[data-v="b"] .rcard { padding: 5px; border-radius: 18px; }
+[data-v="b"] .rcard .ph { aspect-ratio: 16 / 9; border-radius: 13px; }
+[data-v="b"] .rcard-body { padding: 7px 3px 3px; }
+[data-v="b"] .rcard-body h4 { font-size: 17.5px; }
+[data-v="b"] .rcard-line { font-size: 11.5px; }
+[data-v="b"] .rcard-line b { font-size: 12px; }
+[data-v="b"] .rate .star { font-size: 12px; }
+
+/* ---------- C: tightest fold, taller photos ---------- */
+/* The list starts almost at the top of the screen, and the lead line gets no
+   breathing room of its own. But the images go 4:3 rather than 16:9, because
+   your card photos are wide group shots of ten-plus dishes and at 92px tall
+   they turn to mush. A narrow column wants a taller crop. So C trades one grid
+   row against food you can actually read, which is the trade worth seeing
+   next to B. */
+
+[data-v="c"] .slimbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  height: 40px;
+}
+[data-v="c"] .slim-mark { font-size: 20px; }
+[data-v="c"] .slim-date { font-size: 11px; }
+
+[data-v="c"] .hero-copy { padding: 9px 14px 0; }
+[data-v="c"] .lead { font-size: 14.5px; line-height: 1.32; font-weight: 450; color: var(--muted); }
+
+[data-v="c"] .dpwrap { margin: 9px 0 0; padding: 0 12px; }
+[data-v="c"] .dp { font-size: 12px; }
+
+/* Card ~180px wide, image ~130px at 4:3. */
+[data-v="c"] .rlist { padding: 9px 12px 0; gap: 12px 10px; }
+[data-v="c"] .rcard { padding: 5px; border-radius: 18px; }
+[data-v="c"] .rcard .ph { aspect-ratio: 4 / 3; border-radius: 13px; }
+[data-v="c"] .rcard-body { padding: 7px 3px 3px; }
+[data-v="c"] .rcard-body h4 { font-size: 17.5px; }
+[data-v="c"] .rcard-line { font-size: 11.5px; }
+[data-v="c"] .rcard-line b { font-size: 12px; }
+[data-v="c"] .rate .star { font-size: 12px; }
+[data-v="c"] .how { padding: 24px 18px 8px; }
+
+/* ---------- variant switcher ---------- */
+/* Rendered only on localhost (see renderHome in app.js), so a screenshot is
+   never ambiguous about which variant it shows and you can flip between the
+   four without editing the URL. Never renders on eatfame.com. */
+
+.vswitch {
+  position: fixed;
+  top: 8px;
+  right: 8px;
+  z-index: 200;
+  display: flex;
+  gap: 3px;
+  padding: 3px;
+  border-radius: var(--pill);
+  background: rgba(5, 57, 27, .88);
+  backdrop-filter: blur(6px);
+  font-family: var(--sans);
+}
+.vswitch a {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 22px;
+  border-radius: var(--pill);
+  color: rgba(255, 255, 255, .7);
+  font-size: 11px;
+  font-weight: 700;
+  text-decoration: none;
+  letter-spacing: .02em;
+}
+.vswitch a.on { background: var(--yellow); color: var(--green); }

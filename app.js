@@ -118,8 +118,10 @@
     d.setDate(d.getDate() + 1);
     return d;
   }
-  function dayDates() {
-    var sun = weekStart(state.week);
+  // Optional week index so the fold's date strip can price out every week
+  // without mutating state.week. Defaults to the selected week as before.
+  function dayDates(wk) {
+    var sun = weekStart(wk === undefined ? state.week : wk);
     var mon = new Date(sun);
     mon.setDate(mon.getDate() + 1);
     return { sun: sun, mon: mon };
@@ -374,6 +376,50 @@
 
   function rcard(r) {
     var from = Math.min.apply(null, r.dishes.map(function (d) { return d.price[2]; }));
+
+    var shape = listShape();
+
+    // Typeset list row: thumbnail, name, cuisine and price on a rule, the way a
+    // printed menu sets a list. Photography drops to a supporting role, which is
+    // the whole proposition of direction D.
+    if (shape === 'row') {
+      return '<button class="rrow" data-go="#/r/' + r.slug + '">' +
+        tile(rImg(r), r.name, 'rrow-thumb') +
+        '<div class="rrow-body">' +
+          '<div class="rrow-top">' +
+            '<h4>' + esc(r.name) + '</h4>' +
+            '<span class="rrow-dots" aria-hidden="true"></span>' +
+            '<span class="rrow-price">' + money(from) + '</span>' +
+          '</div>' +
+          '<div class="rrow-sub">' +
+            (r.tags[0] ? esc(r.tags[0]) : '') +
+            (r.rating ? ' <span class="sep">·</span> ' + r.rating : '') +
+          '</div>' +
+        '</div></button>';
+    }
+
+    // Two-up grid. The card is about 175px wide on a 390px phone, so the name
+    // and the price cannot share a baseline row and three tags do not fit.
+    // Uber's card body is the model instead: name, then two short meta lines.
+    // The first tag alone carries the cuisine, which is the only one a cold
+    // visitor scanning a grid actually uses.
+    if (shape === 'grid') {
+      // Direction I quotes a typical price rather than the floor, so the
+      // number on the card is one a real basket actually lands on.
+      var priceCell = foldVariant() === 'i'
+        ? '~<b>' + money(typicalPrice(r)) + '</b>'
+        : 'from <b>' + money(from) + '</b>';
+      return '<button class="rcard" data-go="#/r/' + r.slug + '">' +
+        tile(rImg(r), r.name) +
+        '<div class="rcard-body">' +
+          '<h4>' + esc(r.name) + '</h4>' +
+          '<div class="rcard-line">' + rate(r) + '</div>' +
+          '<div class="rcard-line">' + priceCell +
+            (r.tags[0] ? ' <span class="sep">·</span> ' + esc(r.tags[0]) : '') +
+          '</div>' +
+        '</div></button>';
+    }
+
     return '<button class="rcard" data-go="#/r/' + r.slug + '">' +
       tile(rImg(r), r.name) +
       '<div class="rcard-body">' +
@@ -388,18 +434,251 @@
       '</div></button>';
   }
 
+  // Which variant the URL asked for. '' is the live layout.
+  //   a b c  fold density ladder on the current (yellow) skin
+  //   d e f g h  the five directions on the new cream/serif brand language
+  // Read fresh each render so the switcher links work without a reload.
+  function foldVariant() {
+    try {
+      var v = (new URLSearchParams(location.search)).get('v');
+      return /^[a-i]$/.test(v || '') ? v : '';
+    } catch (e) { return ''; }
+  }
+
+  // How the restaurant list is built. Each brand direction picks its own, since
+  // the point of the five is that they are allowed to disagree about layout.
+  //   legacy  one-up photo card, as live today
+  //   grid    two-up photo card
+  //   row     typeset list row with a small square thumbnail
+  var LIST_SHAPE = { a: 'grid', b: 'grid', c: 'grid',
+                     d: 'row', e: 'legacy', f: 'grid', g: 'grid', h: 'grid',
+                     i: 'grid' };
+  function listShape() { return LIST_SHAPE[foldVariant()] || 'legacy'; }
+
+  // The masthead each direction puts at the top of the home screen.
+  //   slim     compressed bar, a/b/c
+  //   poster   the brand poster as the whole fold, e
+  //   mast     centred serif wordmark with a rule, d/f/g/h
+  var HOME_HEAD = { a: 'slim', b: 'slim', c: 'slim',
+                    d: 'mast', e: 'poster', f: 'mast', g: 'mast', h: 'mast',
+                    i: 'appbar' };
+
+  /* ---------- direction I ----------
+     The current site with the order app's navigation folded in. Three things
+     carry over from the app: the green header bar doing the navigating, a
+     postcode control, and the week selector living in that header rather than
+     in the page body. Three things are new, and each answers something from
+     the UX review: a cuisine filter for the 16-restaurant browse problem, a
+     typical price on cards instead of the floor price that was biasing the
+     willingness-to-pay read, and the price mechanic stated in the fold.
+
+     The notch appears exactly three times: the bottom of the header band, the
+     price-mechanic chip, and the basket docket on the cart. Not on the
+     restaurant cards, and not on the floating pill. */
+
+  // No cuisine filter. It was here because data.js carries 16 restaurants and
+  // an unfiltered list of 16 is a scroll rather than a choice. At the planned
+  // 8 the whole list is two or three screens and browsable, so a filter would
+  // be chrome for a problem that no longer exists.
+
+  // The median dish price at the best tier, not the cheapest dish. "from
+  // €5.00" on Thai Deum next to "from €15.50" on Swagat anchored people at a
+  // price no realistic basket reaches, and the survey's fair_price answer is
+  // measured against that anchor.
+  function typicalPrice(r) {
+    var p = r.dishes.map(function (d) { return d.price[2]; }).sort(function (a, b) { return a - b; });
+    var m = p.length / 2;
+    return p.length % 2 ? p[(p.length - 1) / 2] : (p[m - 1] + p[m]) / 2;
+  }
+
+  var POST_KEY = 'fame_postcode_v1';
+  var pcOpen = false;
+  var wkOpen = false;
+  function postcode() {
+    try { return localStorage.getItem(POST_KEY) || ''; } catch (e) { return ''; }
+  }
+
+  // Amsterdam is 1011-1109. Anything else is outside the delivery area, which
+  // is worth capturing rather than rejecting: where people want this is
+  // supply-side intel the fake door gets for free.
+  function pcInArea(v) {
+    var n = parseInt(String(v).replace(/\D/g, '').slice(0, 4), 10);
+    return n >= 1011 && n <= 1109;
+  }
+
+  function appbar() {
+    var pc = postcode();
+    // Two rows again, but the controls are compact single-line chips sized to
+    // their content rather than stacked label-over-value blocks at full width.
+    // That was what made the second row 44px tall for no gain.
+    return '<div class="appbar">' +
+      '<div class="appbar-top">' +
+        '<div class="appbar-mark">' + esc(C.brand) + '.</div>' +
+        // A person glyph on a square, matching the 8px radius everything else
+        // uses. The previous ring-with-a-dot read as a decorative mark.
+        '<button class="appbar-acct" aria-label="Your account" data-go="#/">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
+            'stroke-width="1.9" aria-hidden="true">' +
+            '<circle cx="12" cy="8.4" r="3.5"/>' +
+            '<path d="M5 20c0-3.7 3.1-6.2 7-6.2s7 2.5 7 6.2" stroke-linecap="round"/>' +
+          '</svg></button>' +
+      '</div>' +
+      '<div class="appbar-controls">' +
+        '<button class="appctl" data-pc="toggle" aria-expanded="' + (pcOpen ? 'true' : 'false') + '">' +
+          (pc ? esc(pc) : 'Postcode') + ' <span class="cv" aria-hidden="true">&#8964;</span>' +
+        '</button>' +
+        '<button class="appctl" data-wk="toggle" aria-expanded="' + (wkOpen ? 'true' : 'false') + '">' +
+          'w/c ' + fmtShort(weekStart(state.week)) + ' <span class="cv" aria-hidden="true">&#8964;</span>' +
+        '</button>' +
+      '</div>' +
+    '</div>' +
+    (pcOpen ? pcPanel(pc) : '') +
+    (wkOpen ? '<div class="wkpanel">' + weekstrip() + '</div>' : '');
+  }
+
+  function pcPanel(pc) {
+    var ok = pc && pcInArea(pc);
+    return '<form class="pcpanel" id="pc-form">' +
+      '<label class="strip-label" for="pc-input">Your postcode</label>' +
+      '<div class="pcrow">' +
+        '<input id="pc-input" name="pc" inputmode="numeric" autocomplete="postal-code" ' +
+          'maxlength="7" placeholder="1015 AB" value="' + esc(pc) + '">' +
+        '<button class="btn btn-sm" type="submit">Check</button>' +
+      '</div>' +
+      (pc
+        ? '<p class="pcnote' + (ok ? ' ok' : ' out') + '">' +
+            (ok ? '&#10003; We deliver to ' + esc(pc) + '.'
+                : 'We are not in ' + esc(pc) + ' yet. Join the list and we will tell you when we are.') +
+          '</p>'
+        : '') +
+    '</form>';
+  }
+
+  function isLocal() {
+    var h = location.hostname;
+    return h === 'localhost' || h === '127.0.0.1' || h === '' || /^192\.168\./.test(h);
+  }
+
+  // Switcher, localhost only, so comparing does not mean editing URLs.
+  function vswitch() {
+    if (!isLocal()) return '';
+    var cur = foldVariant();
+    var opts = [['', 'live'], ['a', 'A'], ['b', 'B'], ['c', 'C'],
+                ['d', 'D'], ['e', 'E'], ['f', 'F'], ['g', 'G'], ['h', 'H'], ['i', 'I']];
+    return '<div class="vswitch">' +
+      opts.map(function (o) {
+        var href = o[0] ? '?v=' + o[0] + location.hash : '.' + location.hash;
+        return '<a href="' + href + '"' + (cur === o[0] ? ' class="on"' : '') + '>' + o[1] + '</a>';
+      }).join('') + '</div>';
+  }
+
+  // Week picker for the fold: the tool in the first fifth of the screen.
+  //
+  // Weeks only, four of them, and the Sunday-or-Monday choice stays at
+  // checkout. Showing all eight slots here meant eight dates side by side,
+  // which read as clutter rather than as a choice. One shared "w/c" label and
+  // four short dates is the least text that still says what the row is for.
+  //
+  // Reuses state.week and the existing data-week handler, so the fold and the
+  // cart cannot disagree about the selected week.
+  function weekstrip() {
+    var pills = '';
+    for (var i = 0; i < WEEK_COUNT; i++) {
+      var on = state.week === i;
+      pills += '<button class="dp' + (on ? ' sel' : '') + '"' +
+        ' data-week="' + i + '"' +
+        ' aria-pressed="' + (on ? 'true' : 'false') + '">' +
+        fmtShort(weekStart(i)) +
+      '</button>';
+    }
+    return '<div class="dpwrap">' +
+      '<div class="dp-label">w/c</div>' +
+      '<div class="datepick" role="group" aria-label="Delivery week">' + pills + '</div>' +
+    '</div>';
+  }
+
   function renderHome() {
     var el = document.getElementById('view-home');
+    var v = foldVariant();
+
+    // The only concrete sentence on the page. In every variant it is promoted
+    // into the headline slot, because "Eat like you went out. All week." is a
+    // claim that cost 140px and told a cold visitor nothing.
+    // C also drops the second sentence. "One delivery, ready whenever you are"
+    // is a convenience promise, and the positioning is gourmand-first, so it is
+    // the weaker half. Cutting it saves a line at the tightest setting.
+    var lead = v === 'c'
+      ? 'Pick real dishes from Amsterdam restaurants you already love.'
+      : 'Pick real dishes from Amsterdam restaurants you already love. One delivery, ready whenever you are.';
+
+    var head;
+    if (!v) {
+      // Live layout, unchanged.
+      head =
+        '<div class="brandmark">' +
+          '<div class="wordmark">' + esc(C.brand) + '.</div>' +
+        '</div>' +
+        '<div class="hero-copy">' +
+          '<h1>' + esc(C.tagline) + '</h1>' +
+          '<p>' + lead + '</p>' +
+        '</div>' +
+        '<div class="notice">Deliveries start ' + startPhrase(weekStart(0)) +
+          '. First drop ' + fmtDay(weekStart(0)) + '.</div>';
+    } else if (HOME_HEAD[v] === 'appbar') {
+      head =
+        appbar() +
+        '<div class="hero-copy"><p class="lead">' + lead + '</p></div>' +
+        // The price mechanic, stated once in the fold. It was previously first
+        // mentioned inside a restaurant menu, below two screens of list.
+        '<div class="mechanic">Every dish drops in price as your week grows. ' +
+          '<b>' + C.bestPriceAt + '+ dishes, best price.</b></div>';
+
+    } else if (HOME_HEAD[v] === 'poster') {
+      // Direction E. The fold is the brand poster and nothing else: corner
+      // brackets, one serif statement, the wordmark. Deliberately spends the
+      // whole first screen on the claim, which is the opposite bet to A/B/C.
+      // Worth seeing next to them rather than argued about.
+      head =
+        '<div class="poster bracket">' +
+          '<h1 class="poster-line">Your fridge should be the best restaurant in your building.</h1>' +
+          '<div class="poster-foot">' +
+            '<div class="poster-mark">' + esc(C.brand) + '.</div>' +
+            '<div class="poster-url">' + esc(C.city) + '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="hero-copy"><p class="lead">' + lead + '</p></div>' +
+        weekstrip();
+
+    } else if (HOME_HEAD[v] === 'mast') {
+      // Directions D, F, G, H. Centred serif wordmark over a rule, the way the
+      // posters set it, then the lead line as a subhead. The uppercase micro
+      // label is the poster's "SCAN TO SEE THE MENU" device.
+      head =
+        '<div class="mast">' +
+          '<div class="mast-mark">' + esc(C.brand) + '.</div>' +
+          '<div class="mast-rule" aria-hidden="true"></div>' +
+          '<p class="mast-lead">' + lead + '</p>' +
+        '</div>' +
+        '<div class="strip-label">Delivery week</div>' +
+        weekstrip();
+
+    } else {
+      // Slim header bar carries the wordmark and the delivery date together,
+      // which removes both the 52px brand block and the notice pill's own row.
+      // Lead line before the picker: a cold visitor off an Instagram ad needs to
+      // know what this is before being asked to choose a date.
+      head =
+        '<div class="slimbar">' +
+          '<div class="slim-mark">' + esc(C.brand) + '.</div>' +
+          '<div class="slim-date">Amsterdam</div>' +
+        '</div>' +
+        '<div class="hero-copy"><p class="lead">' + lead + '</p></div>' +
+        weekstrip();
+    }
+
     el.innerHTML =
-      '<div class="brandmark">' +
-        '<div class="wordmark">' + esc(C.brand) + '.</div>' +
-      '</div>' +
-      '<div class="hero-copy">' +
-        '<h1>' + esc(C.tagline) + '</h1>' +
-        '<p>Pick real dishes from Amsterdam restaurants you already love. One delivery, ready whenever you are.</p>' +
-      '</div>' +
-      '<div class="notice">Deliveries start ' + startPhrase(weekStart(0)) +
-        '. First drop ' + fmtDay(weekStart(0)) + '.</div>' +
+      vswitch() +
+      head +
       '<div class="rlist">' + R.map(rcard).join('') + '</div>' +
       '<div class="how"><div class="eyebrow">How it works</div><ol>' +
         '<li>Pick at least ' + C.minDishes + ' dishes for the week.</li>' +
@@ -426,9 +705,21 @@
     if (!r) { location.replace('#/'); return; }
     var t = tierText();
     var el = document.getElementById('view-menu');
+
+    // Direction I: the photo runs to the top of the screen and the back
+    // control floats on it, over a scrim so it stays legible whatever the
+    // image underneath happens to be.
+    var top = foldVariant() === 'i'
+      ? '<div class="rhero">' + tile(rImg(r), r.name, '', true) +
+          '<div class="rhero-scrim" aria-hidden="true"></div>' +
+          '<button class="rhero-back" data-go="#/" aria-label="Back to restaurants">' +
+            '<span aria-hidden="true">&#8249;</span></button>' +
+        '</div>'
+      : backbar();
+
     el.innerHTML =
-      backbar() +
-      '<div class="rhead">' + tile(rImg(r), r.name, '', true) +
+      top +
+      '<div class="rhead">' + (foldVariant() === 'i' ? '' : tile(rImg(r), r.name, '', true)) +
         '<div class="rhead-body">' +
           '<div class="rhead-title">' +
             '<h1>' + esc(r.name) + '</h1>' +
@@ -436,7 +727,11 @@
           '</div>' +
           '<div class="meta">' + rate(r, true) + esc(r.blurb) + '</div>' +
       '</div></div>' +
-      '<div class="tierbar' + (t.done ? ' done' : '') + '">' + t.text + '</div>' +
+      // Direction I moves the tier nudge into the floating summary. It belongs
+      // next to the total it changes, not as a band the eye skips on the way
+      // to the dishes.
+      (foldVariant() === 'i' ? '' :
+        '<div class="tierbar' + (t.done ? ' done' : '') + '">' + t.text + '</div>') +
       '<div class="dishes">' + r.dishes.map(function (d) {
         var key = r.slug + ':' + d.id;
         var q = state.cart[key] || 0;
@@ -458,6 +753,45 @@
         '</div>';
       }).join('') + '</div>' +
       '<div class="pad-bar" style="height:8px"></div>';
+  }
+
+  // A stated window, which the site previously never gave. "Which day" with no
+  // "when" is half an answer for food that has to be received in person, and it
+  // was the most likely unanswered objection at the point of committing.
+  var DELIVERY_WINDOW = '17:00 – 21:00';
+
+  function deliveryPicker() {
+    var d = dayDates();
+
+    // Direction I picks the week in the header, so the cart has no business
+    // holding a second week picker. What is left is the actual choice: which of
+    // two dates, and now at what time.
+    if (foldVariant() === 'i') {
+      return '<div class="sub-h">Delivery</div>' +
+        '<div class="dayline">' +
+          ['sun', 'mon'].map(function (k) {
+            return '<button class="dayopt' + (state.day === k ? ' sel' : '') + '" data-day="' + k + '">' +
+              '<span class="dayopt-d">' + fmtDay(d[k]) + '</span>' +
+              '<span class="dayopt-t">' + DELIVERY_WINDOW + '</span>' +
+            '</button>';
+          }).join('') +
+        '</div>';
+    }
+
+    return '<div class="sub-h">Delivery week</div>' +
+      '<div class="weekbar">' + (function () {
+        var out = '';
+        for (var i = 0; i < WEEK_COUNT; i++) {
+          out += '<button class="wk' + (state.week === i ? ' sel' : '') + '" data-week="' + i + '">' +
+            '<b>w/c</b><span>' + fmtShort(weekStart(i)) + '</span></button>';
+        }
+        return out;
+      })() + '</div>' +
+      '<div class="sub-h">Delivery day</div>' +
+      '<div class="days">' +
+        '<button class="day' + (state.day === 'sun' ? ' sel' : '') + '" data-day="sun"><b>Sunday</b><span>' + fmtDay(d.sun) + '</span></button>' +
+        '<button class="day' + (state.day === 'mon' ? ' sel' : '') + '" data-day="mon"><b>Monday</b><span>' + fmtDay(d.mon) + '</span></button>' +
+      '</div>';
   }
 
   function renderCart() {
@@ -485,9 +819,24 @@
     var notePos = n < C.minDishes ? 'none' : n < C.bestPriceAt ? 'top' : 'bottom';
     var note = '<div class="tierbar inline-note' + (notePos === 'top' ? ' at-top' : '') + '">' + tt.text + '</div>';
 
+    // Direction I drops the "Restaurants" bar and uses the same floating
+    // control as the restaurant page, so the two screens agree about how you
+    // go back.
+    var isI = foldVariant() === 'i';
+    // The nudge lives in the button for I, so the inline note is suppressed
+    // rather than repeated.
+    if (isI) notePos = 'none';
+
     el.innerHTML =
-      backbar() +
-      '<div class="wrap"><h1 class="page-h">Your week</h1></div>' +
+      (isI
+        // Back control and title on one row. Floating alone above the heading it
+        // read as an orphan, and cost a whole row of the screen to do it.
+        ? '<div class="wrap cart-head">' +
+            '<button class="floatback" data-go="#/" aria-label="Back to restaurants">' +
+              '<span aria-hidden="true">&#8249;</span></button>' +
+            '<h1 class="page-h">Your week</h1>' +
+          '</div>'
+        : backbar() + '<div class="wrap"><h1 class="page-h">Your week</h1></div>') +
       '<div class="wrap">' +
         (notePos === 'top' ? note : '') +
         '<div class="clist">' + rows + '</div>' +
@@ -497,21 +846,18 @@
           '<div class="row"><span>Delivery</span><span>Free</span></div>' +
           '<div class="row big"><span>Total</span><span class="amt">' + money(subtotal()) + '</span></div>' +
         '</div>' +
-        '<div class="sub-h">Delivery week</div>' +
-        '<div class="weekbar">' + (function () {
-          var out = '';
-          for (var i = 0; i < WEEK_COUNT; i++) {
-            out += '<button class="wk' + (state.week === i ? ' sel' : '') + '" data-week="' + i + '">' +
-              '<b>w/c</b><span>' + fmtShort(weekStart(i)) + '</span></button>';
-          }
-          return out;
-        })() + '</div>' +
-        '<div class="sub-h">Delivery day</div>' +
-        '<div class="days">' +
-          '<button class="day' + (state.day === 'sun' ? ' sel' : '') + '" data-day="sun"><b>Sunday</b><span>' + fmtDay(dayDates().sun) + '</span></button>' +
-          '<button class="day' + (state.day === 'mon' ? ' sel' : '') + '" data-day="mon"><b>Monday</b><span>' + fmtDay(dayDates().mon) + '</span></button>' +
-        '</div>' +
+        deliveryPicker() +
         (notePos === 'bottom' ? note : '') +
+        // The page ends here and on a tall phone that left a screen of nothing
+        // above the button. This answers the question someone actually has at
+        // this point rather than filling space.
+        (isI
+          ? '<div class="cart-note">' +
+              '<p><b>No payment at this step.</b> Nothing is charged and no card ' +
+              'details are asked for.</p>' +
+              '<p>Chilled, ready to heat. Orders close the Friday before.</p>' +
+            '</div>'
+          : '') +
       '</div>' +
       '<div class="pad-bar" style="height:8px"></div>';
   }
@@ -577,19 +923,40 @@
     bar.classList.toggle('show', visible);
     if (!visible) { bar.innerHTML = ''; return; }
 
+    var isI = foldVariant() === 'i';
+
+    // Direction I puts the nudge inside the button as a second line. Above the
+    // button it was butter on butter and effectively invisible; reversed out of
+    // the green it cannot be missed, and it sits against the total it changes.
+    function sub(text) {
+      return isI && text ? '<span class="cb-sub">' + text + '</span>' : '';
+    }
+
     if (onCart) {
       var ok = n >= C.minDishes;
+      var t = tierText();
+      var cartSub = !ok
+        ? 'Add ' + (C.minDishes - n) + ' more dish' + (C.minDishes - n > 1 ? 'es' : '') + ' to continue'
+        : (t.done ? '' : t.text);
       bar.innerHTML =
-        (ok ? '' : '<div class="hint">Add ' + (C.minDishes - n) + ' more dish to continue</div>') +
-        '<button class="btn" id="checkout"' + (ok ? '' : ' disabled') + '>' +
-          '<span>Order for w/c ' + fmtShort(weekStart(state.week)) + '</span>' +
-          '<span class="cb-t">' + money(subtotal()) + '</span></button>';
+        (isI ? '' : (ok ? '' : '<div class="hint">Add ' + (C.minDishes - n) + ' more dish to continue</div>')) +
+        '<button class="btn' + (isI ? ' cbstack' : '') + '" id="checkout"' + (ok ? '' : ' disabled') + '>' +
+          '<span class="cb-row">' +
+            '<span>Order for w/c ' + fmtShort(weekStart(state.week)) + '</span>' +
+            '<span class="cb-t">' + money(subtotal()) + '</span>' +
+          '</span>' + sub(cartSub) +
+        '</button>';
       if (ok) document.getElementById('checkout').addEventListener('click', onCheckout);
     } else {
+      var mt = tierText();
+      var menuSub = (isI && state.view === 'menu' && !mt.done) ? mt.text : '';
       bar.innerHTML =
-        '<button class="btn" data-go="#/cart">' +
-          '<span class="cb-n">' + n + '</span><span>View my week</span>' +
-          '<span class="cb-t">' + money(subtotal()) + '</span></button>';
+        '<button class="btn' + (isI ? ' cbstack' : '') + '" data-go="#/cart">' +
+          '<span class="cb-row">' +
+            '<span class="cb-n">' + n + '</span><span>View my week</span>' +
+            '<span class="cb-t">' + money(subtotal()) + '</span>' +
+          '</span>' + sub(menuSub) +
+        '</button>';
     }
   }
 
@@ -727,7 +1094,7 @@
 
   document.addEventListener('click', function (e) {
     if (!e.target || !e.target.closest) return;
-    var t = e.target.closest('[data-go],[data-inc],[data-dec],[data-day],[data-week],[data-sq],[data-consent]');
+    var t = e.target.closest('[data-go],[data-inc],[data-dec],[data-day],[data-week],[data-sq],[data-consent],[data-pc],[data-wk]');
     if (!t) return;
     if (t.hasAttribute('data-consent')) {
       var v = t.getAttribute('data-consent');
@@ -742,8 +1109,34 @@
     if (t.hasAttribute('data-go')) { go(t.getAttribute('data-go')); return; }
     if (t.hasAttribute('data-inc')) { bump(t.getAttribute('data-inc'), 1); return; }
     if (t.hasAttribute('data-dec')) { bump(t.getAttribute('data-dec'), -1); return; }
+    // The two header controls are mutually exclusive: opening one closes the
+    // other, so the fold never carries two panels at once.
+    if (t.hasAttribute('data-pc')) {
+      pcOpen = !pcOpen; wkOpen = false;
+      render();
+      if (pcOpen) { var f = document.getElementById('pc-input'); if (f) f.focus(); }
+      return;
+    }
+    if (t.hasAttribute('data-wk')) {
+      wkOpen = !wkOpen; pcOpen = false;
+      render();
+      return;
+    }
     if (t.hasAttribute('data-day')) { state.day = t.getAttribute('data-day'); save(); track('day_selected', { day: state.day }); render(); return; }
-    if (t.hasAttribute('data-week')) { state.week = +t.getAttribute('data-week'); save(); track('week_selected', { week: state.week, week_of: fmtShort(weekStart(state.week)) }); render(); return; }
+    // The fold's week strip and the cart's week picker share this handler, so
+    // they cannot disagree. source tells you which one was tapped, which is the
+    // whole question the fold picker exists to answer.
+    if (t.hasAttribute('data-week')) {
+      state.week = +t.getAttribute('data-week');
+      save();
+      track('week_selected', {
+        week: state.week,
+        week_of: fmtShort(weekStart(state.week)),
+        source: state.view,
+      });
+      render();
+      return;
+    }
     if (t.hasAttribute('data-sq')) {
       state.survey[t.getAttribute('data-sq')] = t.getAttribute('data-sv');
       track('survey_answered', {
@@ -752,6 +1145,25 @@
       });
       renderDone();
     }
+  });
+
+  // Delegated, because the home view is re-rendered wholesale and a listener
+  // bound to the form element would be thrown away on every render.
+  document.addEventListener('submit', function (e) {
+    if (!e.target || e.target.id !== 'pc-form') return;
+    e.preventDefault();
+    var input = document.getElementById('pc-input');
+    var v = (input.value || '').trim().toUpperCase().replace(/\s+/g, ' ');
+    if (!/^\d{4}/.test(v)) { input.focus(); return; }
+    try { localStorage.setItem(POST_KEY, v); } catch (err) {}
+    // Only the numeric prefix goes to analytics. A full Dutch postcode plus a
+    // house number identifies a household, and the digits alone are enough to
+    // answer the only question being asked, which is which areas want this.
+    track('postcode_set', {
+      postcode_area: v.replace(/\D/g, '').slice(0, 4),
+      in_area: pcInArea(v),
+    });
+    render();
   });
 
   window.addEventListener('hashchange', route);

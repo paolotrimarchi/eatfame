@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#F7F2E7">
+<title>Sera · Tonight's menu</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="app">
+
+  <!-- header -->
+  <div class="hdr">
+    <div class="wordmark">Sera</div>
+    <div class="hdr-right">
+      <button class="pc-pill" onclick="openPc()" aria-label="Change delivery postcode">
+        <svg class="pin" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>
+        </svg>
+        <span id="pcLabel">1073 AB</span>
+        <svg class="cv" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m6 9 6 6 6-6"/>
+        </svg>
+      </button>
+      <button class="avatar" id="avatar" onclick="openProfile()" aria-label="Your account">PT</button>
+    </div>
+  </div>
+
+  <div class="tabs" id="tabs"></div>
+
+  <div class="scroll">
+    <div id="pane"></div>
+    <div class="foot">
+      <div class="fm">Sera</div>
+      <p>Two Amsterdam kitchens a night. Order by three, pick your hour, and dinner&rsquo;s done for the day.</p>
+    </div>
+  </div>
+
+  <!-- bottom bar, hidden until something is picked -->
+  <div class="bar" id="bar">
+    <div class="in">
+      <div class="sum">
+        <div class="s1" id="barCount">&nbsp;</div>
+        <div class="s2" id="barNote">&nbsp;</div>
+      </div>
+      <button class="cta" onclick="goCheckout()">Choose a delivery hour</button>
+    </div>
+  </div>
+
+  <div class="scrim" id="scrim" onclick="closeSheet()"></div>
+
+  <div class="sheet" id="sheet">
+    <div class="grab"></div>
+
+    <div id="sh-pc" style="display:none">
+      <div class="sh-head">
+        <h3>Where are we delivering?</h3>
+        <p>We run one neighbourhood at a time, so we need the street as well as the postcode.</p>
+      </div>
+      <div class="sh-body">
+        <label class="fl" for="addrStreet">Street and number</label>
+        <input id="addrStreet" type="text" autocomplete="street-address"
+               placeholder="Govert Flinckstraat 42" oninput="addrTyped()">
+
+        <label class="fl" for="addrPc">Postcode</label>
+        <input id="addrPc" type="text" inputmode="text" autocomplete="postal-code"
+               placeholder="1073 AB" maxlength="8" oninput="addrTyped()">
+
+        <div class="err" id="addrErr">&nbsp;</div>
+        <div class="cover" id="cover"></div>
+
+        <button class="cta wide" id="addrSave" onclick="saveAddress()">Save address</button>
+
+        <div id="savedWrap"></div>
+      </div>
+    </div>
+
+    <div id="sh-profile" style="display:none">
+      <div class="sh-head">
+        <h3 id="profName">Paolo Trimarchi</h3>
+        <p id="profSub">Delivering to 1073 AB · De Pijp</p>
+      </div>
+      <div class="sh-body">
+        <div class="pc-list">
+          <button type="button">Order history <small>Nothing here yet</small></button>
+          <button type="button">Saved addresses <small id="profPc">1073 AB · De Pijp</small></button>
+          <button type="button">Dietary preferences <small>Not set</small></button>
+          <button type="button">Notifications <small>Daily menu at 11:00</small></button>
+        </div>
+        <button class="cta ghost wide" style="margin-top:6px" onclick="closeSheet()">Close</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script>
+var cart = loadCart();
+var dayIdx = 0;
+var view = 'day';
+
+/* ---------------- header ---------------- */
+function paintHeader(){
+  var pc = getPostcode(), street = getStreet();
+  document.getElementById('pcLabel').textContent = pc || 'Add address';
+  document.getElementById('avatar').textContent = S.user.initials;
+  document.getElementById('profName').textContent = S.user.name;
+  var line = (street ? street + ', ' : '') + pc
+           + (postcodeArea(pc) ? ' · ' + postcodeArea(pc) : '');
+  document.getElementById('profSub').textContent = street ? ('Delivering to ' + line) : 'No address yet';
+  document.getElementById('profPc').textContent = street ? line : 'None saved';
+}
+
+/* ---------------- tabs ---------------- */
+function paintTabs(){
+  var h = '';
+  S.days.forEach(function(d, i){
+    h += '<button class="tab' + (view==='day' && i===dayIdx ? ' on' : '') + '" onclick="showDay(' + i + ')">' + d.label + '</button>';
+  });
+  h += '<button class="tab' + (view==='week' ? ' on' : '') + '" onclick="showWeek()">The week</button>';
+  document.getElementById('tabs').innerHTML = h;
+}
+
+/* ---------------- cards ---------------- */
+/* A div, not a button — the stepper inside has real buttons and
+   nesting them inside a button is invalid, which breaks the card. */
+function cardHTML(dish, kitchen, qty){
+  var d = { id:dish.id, name:dish.name, slug:kitchen.slug };
+  return '<div class="card' + (qty ? ' on' : '') + '" id="card-' + dish.id + '" '
+    +      'role="button" tabindex="0" onclick="bump(\'' + dish.id + '\',1)">'
+    +    photoHTML(d)
+    +    '<div class="act" id="act-' + dish.id + '" onclick="stopHere(event)">' + actHTML(dish.id, qty) + '</div>'
+    +    '<div class="cap">'
+    +      '<h4>' + dish.name + '</h4>'
+    +      '<div class="pr">' + eur(dish.price) + '</div>'
+    +    '</div>'
+    +  '</div>';
+}
+
+function actHTML(id, qty){
+  if (!qty){
+    return '<button class="plus" onclick="bump(\'' + id + '\',1)" aria-label="Add">'
+      +      '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>'
+      +    '</button>';
+  }
+  return stepperHTML(id, qty);
+}
+
+function stopHere(e){ e.stopPropagation(); }
+
+function paintDay(){
+  var day = S.days[dayIdx];
+  var co = cutoffText(day.key);
+  var h = '<div class="cut ' + co.cls + '"><span class="dot"></span>' + co.text + '</div>';
+
+  day.kitchens.forEach(function(k){
+    h += '<div class="k-head">'
+      +    '<div class="k-info">'
+      +      '<span class="k-name">' + k.name + '</span>'
+      +      '<span class="k-sub">'
+      +        '<span class="k-cuisine">' + k.cuisine + '</span>'
+      +        '<span class="k-rate"><b>★</b> ' + k.rating + '</span>'
+      +        '<span class="k-revs">' + k.reviews + ' reviews</span>'
+      +      '</span>'
+      +    '</div>'
+      +    restaurantHTML(k)
+      +  '</div><div class="grid">';
+
+    k.dishes.forEach(function(x){
+      var qty = (day.key === cart.dayKey) ? (cart.items[x.id] || 0) : 0;
+      h += cardHTML(x, k, qty);
+    });
+    h += '</div>';
+  });
+
+  document.getElementById('pane').innerHTML = h;
+}
+
+function paintWeek(){
+  var h = '<div class="cut soft"><span class="dot"></span>Two kitchens a night, never the same pair twice running</div><div class="week">';
+  S.week.forEach(function(w, i){
+    h += '<div class="w-row' + (i===0 ? ' today' : '') + '">'
+      +    '<span class="w-day">' + w.day + '</span>'
+      +    '<span class="w-pair">' + w.a + ' <i>&amp;</i> ' + w.b + (w.expected ? ' <i>expected</i>' : '') + '</span>'
+      +  '</div>';
+  });
+  document.getElementById('pane').innerHTML = h + '</div>';
+}
+
+/* ---------------- interaction ---------------- */
+function showDay(i){
+  view = 'day';
+  if (i !== dayIdx){
+    dayIdx = i;
+    if (cart.dayKey !== S.days[i].key && cartCount(cart) > 0){
+      cart = { dayKey: S.days[i].key, items:{} };
+      saveCart(cart);
+    } else {
+      cart.dayKey = S.days[i].key;
+    }
+  }
+  paintTabs(); paintDay(); paintBar();
+}
+
+function showWeek(){ view = 'week'; paintTabs(); paintWeek(); paintBar(); }
+
+function bump(id, delta){
+  cart.dayKey = S.days[dayIdx].key;
+  var n = (cart.items[id] || 0) + delta;
+  if (n <= 0) delete cart.items[id]; else cart.items[id] = n;
+  saveCart(cart);
+
+  var q = cart.items[id] || 0;
+  var card = document.getElementById('card-' + id);
+  var act  = document.getElementById('act-' + id);
+  if (card) card.classList.toggle('on', q > 0);
+  if (act)  act.innerHTML = actHTML(id, q);
+  paintBar();
+}
+
+function paintBar(){
+  var n = cartCount(cart), bar = document.getElementById('bar');
+  if (n === 0 || view === 'week'){ bar.classList.remove('up'); return; }
+  document.getElementById('barCount').textContent = n + (n === 1 ? ' dish' : ' dishes') + ' · ' + eur(cartSubtotal(cart));
+  document.getElementById('barNote').textContent =
+    (cart.dayKey === 'tonight' ? 'Tonight' : 'Tomorrow') + ' · no delivery fee';
+  bar.classList.add('up');
+}
+
+function goCheckout(){ location.href = 'checkout.html?' + cartQuery(cart); }
+
+/* ---------------- sheet ---------------- */
+function openSheet(which){
+  document.getElementById('sh-pc').style.display      = (which === 'pc' ? '' : 'none');
+  document.getElementById('sh-profile').style.display = (which === 'profile' ? '' : 'none');
+  document.getElementById('scrim').classList.add('on');
+  document.getElementById('sheet').classList.add('up');
+}
+function closeSheet(){
+  document.getElementById('scrim').classList.remove('on');
+  document.getElementById('sheet').classList.remove('up');
+}
+function openProfile(){ openSheet('profile'); }
+
+function openPc(){
+  document.getElementById('addrStreet').value = getStreet();
+  document.getElementById('addrPc').value = getPostcode();
+  paintSaved();
+  addrTyped();
+  openSheet('pc');
+  setTimeout(function(){
+    if (!getStreet()) document.getElementById('addrStreet').focus();
+  }, 320);
+}
+
+/* live feedback as they type: valid postcode, and whether we run there */
+function addrTyped(){
+  var street = document.getElementById('addrStreet').value.trim();
+  var raw    = document.getElementById('addrPc').value.trim();
+  var pc     = normalisePostcode(raw);
+  var err    = document.getElementById('addrErr');
+  var cover  = document.getElementById('cover');
+  var save   = document.getElementById('addrSave');
+
+  err.classList.remove('on');
+  cover.className = 'cover';
+  cover.innerHTML = '';
+
+  if (raw && !pc){
+    err.textContent = 'A Dutch postcode looks like 1073 AB.';
+    err.classList.add('on');
+  }
+
+  if (pc){
+    var c = coverageFor(pc);
+    if (c && c.live){
+      cover.className = 'cover live';
+      cover.innerHTML = '<b>' + c.area + '</b> — we run here. Two kitchens tonight.';
+    } else if (c){
+      cover.className = 'cover soon';
+      cover.innerHTML = '<b>' + c.area + '</b> — not on your street yet. Save it and you&rsquo;ll '
+        + 'hear the night we open there.';
+    } else {
+      cover.className = 'cover soon';
+      cover.innerHTML = 'We don&rsquo;t run in this postcode yet. Save it anyway — where people '
+        + 'ask is how we choose the next street.';
+    }
+  }
+
+  save.disabled = !(street && pc);
+}
+
+function saveAddress(){
+  var street = document.getElementById('addrStreet').value.trim();
+  var pc = normalisePostcode(document.getElementById('addrPc').value);
+  if (!street || !pc) return;
+  setStreet(street); setPostcode(pc);
+  paintHeader(); closeSheet();
+}
+
+function paintSaved(){
+  if (!S.savedAddresses.length){ document.getElementById('savedWrap').innerHTML = ''; return; }
+  var curPc = getPostcode(), curSt = getStreet(), h = '';
+  h += '<label class="fl" style="margin:20px 0 7px">Saved</label><div class="pc-list">';
+  S.savedAddresses.forEach(function(a, i){
+    var on = (a.pc === curPc && a.street === curSt);
+    h += '<button type="button" class="' + (on ? 'on' : '') + '" onclick="useSaved(' + i + ')">'
+      +    '<span>' + a.street + '<small>' + a.pc
+      +      (postcodeArea(a.pc) ? ' · ' + postcodeArea(a.pc) : '')
+      +      (a.label ? ' · ' + a.label : '') + '</small></span>'
+      +    (on ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#16140E" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>' : '')
+      +  '</button>';
+  });
+  document.getElementById('savedWrap').innerHTML = h + '</div>';
+}
+
+function useSaved(i){
+  var a = S.savedAddresses[i];
+  setStreet(a.street); setPostcode(a.pc);
+  paintHeader(); closeSheet();
+}
+
+/* ---------------- boot ---------------- */
+paintHeader();
+for (var i=0;i<S.days.length;i++) if (S.days[i].key === cart.dayKey) dayIdx = i;
+paintTabs(); paintDay(); paintBar();
+
+setInterval(function(){
+  if (view !== 'day') return;
+  var co = cutoffText(S.days[dayIdx].key);
+  var el = document.querySelector('#pane .cut');
+  if (el){ el.className = 'cut ' + co.cls; el.innerHTML = '<span class="dot"></span>' + co.text; }
+}, 30000);
+</script>
+</body>
+</html>
